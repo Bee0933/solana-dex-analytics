@@ -13,12 +13,5 @@ def get_snapshot_metadata() -> tuple[datetime, date]:
     return snapshot_at, snapshot_date
 
 
-def build_snapshot_columns(
-    snapshot_at: datetime,
-    snapshot_date: date,
-) -> dict[str, str]:
-    """Return snapshot timestamp columns as ISO strings ready for serialisation."""
-    return {
-        "snapshot_at": snapshot_at.isoformat(),
-        "snapshot_date": snapshot_date.isoformat(),
-    }
+def date_to_compact(d: date) -> str:
+    return d.strftime("%Y%m%d")
