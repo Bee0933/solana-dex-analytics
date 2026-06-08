@@ -1,0 +1,70 @@
+version: 2
+
+models:
+  - name: fct_pool_trailing_24h
+    description: >
+      Fact table — one row per (pool_address, snapshot_date).
+      Contains every pool snapshot we have ever ingested, enriched with
+      share percentages, fee rate, and week-over-week trends.
+      Partitioned by snapshot_date, clustered by (dex_name, pool_address).
+    columns:
+      - name: pool_snapshot_key
+        description: "Surrogate key — unique identifier for this pool on this date"
+        tests: [not_null, unique]
+      - name: snapshot_date
+        tests: [not_null]
+      - name: dex_name
+        tests:
+          - not_null
+          - accepted_values:
+              values: [raydium, orca, meteora]
+      - name: pool_address
+        tests: [not_null]
+      - name: trailing_24h_volume_usd
+        tests: [not_null]
+
+  - name: fct_dex_market_share_daily
+    description: >
+      Fact table — one row per (dex_name, snapshot_date).
+      Tracks each DEX's share of total Solana DEX volume over time.
+      Partitioned by snapshot_date, clustered by dex_name.
+    columns:
+      - name: market_share_snapshot_key
+        description: "Surrogate key — unique identifier for this DEX on this date"
+        tests: [not_null, unique]
+      - name: snapshot_date
+        tests: [not_null]
+
+  - name: dim_pool
+    description: >
+      Dimension table — one row per unique pool_address.
+      Contains the latest metadata (token symbols, DEX name) plus
+      lifetime observed volume and fee totals since we started ingesting.
+    columns:
+      - name: pool_key
+        description: "Surrogate key — join target from fct_pool_trailing_24h"
+        tests: [not_null, unique]
+      - name: pool_address
+        tests: [not_null, unique]
+
+  - name: dim_token
+    description: >
+      Dimension table — one row per unique token_address.
+      Built by unioning base and quote token sides of every pool snapshot.
+    columns:
+      - name: token_key
+        description: "Surrogate key — join target from fct_pool_trailing_24h"
+        tests: [not_null, unique]
+      - name: token_address
+        tests: [not_null, unique]
+
+  - name: dim_date
+    description: >
+      Standard calendar dimension spanning 2025-01-01 through one year from today.
+      Join fct tables on snapshot_date = dim_date.calendar_date.
+    columns:
+      - name: date_key
+        description: "Surrogate key for the calendar date"
+        tests: [not_null, unique]
+      - name: calendar_date
+        tests: [not_null, unique]

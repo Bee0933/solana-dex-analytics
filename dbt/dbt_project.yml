@@ -4,6 +4,8 @@ config-version: 2
 
 profile: solana_dex_analytics
 
+require-dbt-version: ">=1.8.0,<2.0.0"
+
 model-paths: ["models"]
 analysis-paths: ["analyses"]
 test-paths: ["tests"]
@@ -16,14 +18,17 @@ clean-targets:
   - "target"
   - "dbt_packages"
 
+vars:
+  solana_raw_dataset: "{{ env_var('BQ_DATASET_RAW', 'solana_raw') }}"
+
 models:
   solana_dex_analytics:
     staging:
-      +schema: "{{ env_var('BQ_DATASET_STAGING', 'solana_staging') }}"
-      +materialized: view
-    intermediate:
-      +schema: "{{ env_var('BQ_DATASET_INTERMEDIATE', 'solana_intermediate') }}"
-      +materialized: view
-    marts:
-      +schema: "{{ env_var('BQ_DATASET_MARTS', 'solana_marts') }}"
       +materialized: table
+      +schema: solana_staging
+    intermediate:
+      +materialized: table
+      +schema: solana_intermediate
+    marts:
+      +materialized: view
+      +schema: solana_marts

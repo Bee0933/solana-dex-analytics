@@ -43,6 +43,39 @@ and `trailing_7d_*` prefixes — never `daily_*`.
 | Terraform | ≥ 1.7 | [developer.hashicorp.com/terraform](https://developer.hashicorp.com/terraform/install) |
 | Docker | latest | [docs.docker.com](https://docs.docker.com/get-docker/) |
 
+## Provisioning Infrastructure
+
+All GCP resources are managed with Terraform. Run this once before the pipeline can execute.
+
+**1. Create the Terraform state bucket manually** (one-time, before `terraform init`):
+
+```bash
+gsutil mb -p PROJECT_ID -l REGION gs://PROJECT_ID-tf-state
+```
+
+**2. Configure variables:**
+
+```bash
+cd terraform
+cp terraform.tfvars.example terraform.tfvars
+# Edit terraform.tfvars with your project_id, region, github_repo, etc.
+```
+
+**3. Init, plan, apply:**
+
+```bash
+terraform init -backend-config="bucket=PROJECT_ID-tf-state"
+terraform plan
+terraform apply
+```
+
+**4. After apply** — store your Prefect API key in Secret Manager:
+
+```bash
+echo -n "YOUR_PREFECT_API_KEY" | \
+  gcloud secrets versions add prefect-api-key --data-file=- --project=PROJECT_ID
+```
+
 ## Local Setup
 
 ```bash
@@ -76,7 +109,7 @@ solana-dex-analytics/
 | Stage | Description | Status |
 |-------|-------------|--------|
 | 1 | Repo setup, tooling, folder skeleton | ✅ Done |
-| 2 | Terraform — GCP infrastructure | ⬜ |
+| 2 | Terraform — GCP infrastructure | ✅ Done |
 | 3 | API clients and parsers (Raydium, Orca, Meteora, DefiLlama) | ⬜ |
 | 4 | Prefect tasks and flow assembly | ⬜ |
 | 5 | dbt models (staging → intermediate → marts) | ⬜ |

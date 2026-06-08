@@ -1,0 +1,68 @@
+version: 2
+
+models:
+  - name: stg_dex_pools
+    description: >
+      Cleaned pool snapshots — one row per (pool_address, snapshot_date).
+      Casts all columns to explicit types and filters out pre-pipeline dates and null volumes.
+    columns:
+      - name: snapshot_date
+        description: "The calendar date this 24-hour window represents"
+        tests: [not_null]
+      - name: snapshot_at
+        description: "Exact UTC timestamp the API was called"
+        tests: [not_null]
+      - name: dex_name
+        description: "DEX that owns this pool: raydium, orca, or meteora"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [raydium, orca, meteora]
+      - name: pool_address
+        description: "On-chain pool address — the pool's unique identifier"
+        tests: [not_null]
+      - name: trailing_24h_volume_usd
+        description: "Rolling 24-hour trade volume in USD"
+        tests: [not_null]
+      - name: trailing_24h_fees_usd
+        description: "Rolling 24-hour fees collected in USD, pre-calculated by the DEX API"
+      - name: tvl_usd
+        description: "Total value locked in the pool in USD at time of snapshot"
+      - name: base_token_symbol
+        description: "Ticker symbol of the base token in the pair (e.g. SOL)"
+      - name: base_token_address
+        description: "On-chain mint address of the base token"
+      - name: quote_token_symbol
+        description: "Ticker symbol of the quote token in the pair (e.g. USDC)"
+      - name: quote_token_address
+        description: "On-chain mint address of the quote token"
+      - name: source_file
+        description: "Full GCS URI of the raw JSON file this row was loaded from"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [snapshot_date, dex_name, pool_address]
+
+  - name: stg_dex_market_share
+    description: >
+      Cleaned DEX-level market share snapshots — one row per (dex_name, snapshot_date).
+      Casts all columns to explicit types.
+    columns:
+      - name: snapshot_date
+        description: "The calendar date this 24-hour window represents"
+        tests: [not_null]
+      - name: snapshot_at
+        description: "Exact UTC timestamp the API was called"
+      - name: dex_name
+        description: "Protocol name as returned by DefiLlama (e.g. raydium, orca, meteora dlmm)"
+        tests: [not_null]
+      - name: trailing_24h_volume_usd
+        description: "Sum of all swap values in USD on this protocol in the last 24 hours"
+      - name: trailing_7d_volume_usd
+        description: "Sum of all swap values in USD on this protocol in the last 7 days"
+      - name: total_volume_usd
+        description: "All-time cumulative swap volume in USD since DefiLlama started tracking this protocol"
+      - name: source_file
+        description: "Full GCS URI of the raw JSON file this row was loaded from"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [snapshot_date, dex_name]

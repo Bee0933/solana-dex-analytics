@@ -1,0 +1,71 @@
+version: 2
+
+sources:
+  - name: solana_raw
+    schema: "{{ env_var('BQ_DATASET_RAW', 'solana_raw') }}"
+    description: "Raw tables loaded directly from API ingest jobs"
+
+    tables:
+      - name: raw_dex_pools
+        description: "Normalized pool snapshots from Raydium, Orca, and Meteora APIs"
+        loaded_at_field: snapshot_at
+        freshness:
+          warn_after: {count: 26, period: hour}
+          error_after: {count: 48, period: hour}
+        columns:
+          - name: snapshot_date
+            description: "The calendar date this 24-hour window represents"
+            tests: [not_null]
+          - name: snapshot_at
+            description: "Exact UTC timestamp the API was called"
+            tests: [not_null]
+          - name: dex_name
+            description: "DEX that owns this pool: raydium, orca, or meteora"
+            tests:
+              - not_null
+              - accepted_values:
+                  values: [raydium, orca, meteora]
+          - name: pool_address
+            description: "On-chain pool address — the pool's unique identifier"
+            tests: [not_null]
+          - name: base_token_symbol
+            description: "Ticker symbol of the base token in the pair (e.g. SOL)"
+          - name: base_token_address
+            description: "On-chain mint address of the base token"
+          - name: quote_token_symbol
+            description: "Ticker symbol of the quote token in the pair (e.g. USDC)"
+          - name: quote_token_address
+            description: "On-chain mint address of the quote token"
+          - name: trailing_24h_volume_usd
+            description: "Rolling 24-hour trade volume in USD, as reported by the DEX API"
+          - name: trailing_24h_fees_usd
+            description: "Rolling 24-hour fees collected in USD, pre-calculated by the DEX API"
+          - name: tvl_usd
+            description: "Total value locked in the pool in USD at time of snapshot"
+          - name: source_file
+            description: "Full GCS URI of the raw JSON file this row was loaded from"
+
+      - name: raw_dex_market_share
+        description: "DefiLlama DEX-level volume snapshots"
+        loaded_at_field: snapshot_at
+        freshness:
+          warn_after: {count: 26, period: hour}
+          error_after: {count: 48, period: hour}
+        columns:
+          - name: snapshot_date
+            description: "The calendar date this 24-hour window represents"
+            tests: [not_null]
+          - name: snapshot_at
+            description: "Exact UTC timestamp the API was called"
+            tests: [not_null]
+          - name: dex_name
+            description: "DEX name as returned by DefiLlama"
+            tests: [not_null]
+          - name: trailing_24h_volume_usd
+            description: "Rolling 24-hour trade volume in USD across the entire DEX"
+          - name: trailing_7d_volume_usd
+            description: "Rolling 7-day trade volume in USD across the entire DEX"
+          - name: total_volume_usd
+            description: "All-time cumulative volume in USD as reported by DefiLlama"
+          - name: source_file
+            description: "Full GCS URI of the raw JSON file this row was loaded from"

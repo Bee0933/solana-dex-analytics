@@ -1,7 +1,13 @@
-.PHONY: install test lint format clean help
+.PHONY: install test test-integration lint format clean help
 
 install:
 	uv sync
+
+test:
+	uv run pytest tests/unit/ -v
+
+test-integration:
+	uv run pytest -m integration -v
 
 lint:
 	uv run ruff check src/ tests/
