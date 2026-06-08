@@ -119,8 +119,8 @@ resource "google_secret_manager_secret" "prefect_api_key" {
 resource "google_iam_workload_identity_pool" "github" {
   workload_identity_pool_id = "github-actions-pool"
   project                   = var.project_id
-  display_name = "GitHub Actions Pool"
-  description  = "Identity pool for GitHub Actions OIDC tokens"
+  display_name              = "GitHub Actions Pool"
+  description               = "Identity pool for GitHub Actions OIDC tokens"
 }
 
 resource "google_iam_workload_identity_pool_provider" "github" {
