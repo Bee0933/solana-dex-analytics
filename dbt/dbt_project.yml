@@ -30,5 +30,5 @@ models:
       +materialized: table
       +schema: solana_intermediate
     marts:
-      +materialized: view
+      +materialized: table
       +schema: solana_marts
