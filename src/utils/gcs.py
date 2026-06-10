@@ -50,7 +50,7 @@ def write_json_to_gcs(
         blob.metadata = metadata
 
     content = json.dumps(data, default=str).encode("utf-8")
-    blob.upload_from_string(content, content_type="application/json")
+    blob.upload_from_string(content, content_type="application/json", timeout=600)
 
     uri = f"gs://{bucket_name}/{object_path}"
     logger.info("gcs_write_complete", uri=uri, bytes_written=len(content))

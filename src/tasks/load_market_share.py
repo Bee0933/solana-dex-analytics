@@ -18,7 +18,7 @@ from src.utils.logging import get_logger
 logger = get_logger(__name__)
 
 
-@task(retries=2, retry_delay_seconds=60)
+@task(retries=0)
 def load_market_share_to_bq(
     gcs_uri: str,
     snapshot_date: date,

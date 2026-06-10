@@ -12,12 +12,13 @@ def _parse_symbols(pool_name: str | None) -> tuple[str | None, str | None]:
 
     Meteora does not return token symbols as separate fields; they are embedded
     in pool_name with a '-' separator (e.g. 'SOL-JitoSOL', 'USDC-USDT').
-    Multi-token pools or unexpected formats return (None, None).
+    Pools whose name starts with '-' (e.g. '-SOL') have no registered base token
+    symbol — base returns 'UNKNOWN'. Unparseable formats return (None, None).
     """
     if not pool_name or "-" not in pool_name:
         return None, None
     base, _, quote = pool_name.partition("-")
-    return base or None, quote or None
+    return base if base else "UNKNOWN", quote or None
 
 
 class MeteoraParser(BaseSourceParser):

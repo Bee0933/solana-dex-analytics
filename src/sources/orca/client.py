@@ -31,6 +31,7 @@ class OrcaClient(BaseSourceClient):
 
     def fetch(self) -> dict[str, Any]:
         all_pools: list[dict[str, Any]] = []
+        seen_addresses: set[str] = set()
         cursor: str | None = None
         pages = 0
         while True:
@@ -40,7 +41,11 @@ class OrcaClient(BaseSourceClient):
             resp = self._get_with_retry(
                 f"{self._base_url}/v2/solana/pools", params=params
             )
-            all_pools.extend(resp.get("data", []))
+            for pool in resp.get("data", []):
+                addr = pool.get("address")
+                if addr and addr not in seen_addresses:
+                    seen_addresses.add(addr)
+                    all_pools.append(pool)
             pages += 1
             cursor = (
                 resp.get("meta", {}).get("cursor", {}).get("next")

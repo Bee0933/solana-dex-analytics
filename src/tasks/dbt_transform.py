@@ -42,6 +42,29 @@ def run_dbt_build(
     if settings.gcp_project_id:
         env["GCP_PROJECT_ID"] = settings.gcp_project_id
 
+    deps_cmd = [
+        "dbt", "deps",
+        "--project-dir", dbt_project_dir,
+        "--profiles-dir", dbt_profiles_dir,
+    ]
+    logger.info("dbt_deps_starting", cmd=" ".join(deps_cmd))
+    deps_result = subprocess.run(
+        deps_cmd,
+        capture_output=True,
+        text=True,
+        check=False,
+        cwd=str(_REPO_ROOT),
+        env=env,
+    )
+    for line in deps_result.stdout.splitlines():
+        if line.strip():
+            logger.info("dbt", line=line)
+    if deps_result.returncode != 0:
+        last_lines = "\n".join(deps_result.stdout.splitlines()[-20:])
+        raise DbtRunError(
+            f"dbt deps exited with code {deps_result.returncode}\n{last_lines}"
+        )
+
     logger.info("dbt_build_starting", cmd=" ".join(cmd))
 
     result = subprocess.run(

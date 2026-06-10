@@ -27,7 +27,7 @@ _PARSER_REGISTRY: dict[str, Any] = {
 }
 
 
-@task(retries=2, retry_delay_seconds=60)
+@task(retries=0)
 def load_pools_to_bq(
     gcs_uri: str,
     dex: str,
