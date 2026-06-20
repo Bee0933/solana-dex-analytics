@@ -1,17 +1,17 @@
-.PHONY: install test test-integration lint format clean help
+.PHONY: install lint format run build
 
 install:
 	uv sync
 
-test:
-	uv run pytest tests/unit/ -v
-
-test-integration:
-	uv run pytest -m integration -v
-
 lint:
-	uv run ruff check src/ tests/
-	uv run ruff format --check src/ tests/
+	uv run ruff check src/
+	uv run ruff format --check src/
 
 format:
-	uv run ruff format src/ tests/
+	uv run ruff format src/
+
+run:
+	uv run python -m src.pipeline
+
+build:
+	bash scripts/publish_image.sh

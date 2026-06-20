@@ -5,8 +5,6 @@ description = "Solana DEX analytics data platform on GCP"
 readme = "README.md"
 requires-python = ">=3.10,<3.11"
 dependencies = [
-    "prefect>=3.0.0",
-    "prefect-gcp>=0.6.0",
     "google-cloud-storage>=2.18.0",
     "google-cloud-bigquery>=3.25.0",
     "google-cloud-secret-manager>=2.20.0",
@@ -22,9 +20,6 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "pytest>=8.3.0",
-    "pytest-mock>=3.14.0",
-    "respx>=0.21.0",
     "ruff>=0.6.0",
     "mypy>=1.11.0",
     "pre-commit>=3.8.0",
@@ -43,10 +38,3 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "C4", "UP", "SIM", "RUF"]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-addopts = "-ra --strict-markers"
-markers = [
-    "integration: live network calls, skip in CI",
-]
