@@ -1,11 +1,14 @@
+"""App configuration, loaded from environment variables (and a local .env file)."""
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=".env",  # read .env locally; in Cloud Run values come from the env
         env_file_encoding="utf-8",
         case_sensitive=False,
+        extra="ignore",  # ignore unknown env vars instead of raising
     )
 
     # GCP
@@ -24,14 +27,10 @@ class Settings(BaseSettings):
     # GCP authentication
     google_application_credentials: str = ""
 
-    # Prefect Cloud
-    prefect_api_key: str = ""
-    prefect_api_url: str = ""
-    prefect_workspace_id: str = ""
-
     # Application
     log_level: str = "INFO"
     environment: str = "local"
 
 
+# import this shared instance everywhere: `from src.config import settings`
 settings = Settings()

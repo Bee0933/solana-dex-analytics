@@ -4,31 +4,30 @@ from typing import Any
 
 from google.cloud import storage  # type: ignore[import-untyped,attr-defined]
 
-from src.utils.logging import get_logger
-from src.utils.temporal import date_to_compact
+from src.logging import get_logger
 
 logger = get_logger(__name__)
+
+
+def _compact(d: date) -> str:
+    return d.strftime("%Y%m%d")
 
 
 def build_pool_partition_path(dex: str, snapshot_date: date) -> str:
     # produces: raw/dex_pools/dex=raydium/date=2026-06-03/raydium_20260603.json
     iso = snapshot_date.isoformat()
-    compact = date_to_compact(snapshot_date)
-    return f"raw/dex_pools/dex={dex}/date={iso}/{dex}_{compact}.json"
+    return f"raw/dex_pools/dex={dex}/date={iso}/{dex}_{_compact(snapshot_date)}.json"
 
 
 def build_market_share_partition_path(snapshot_date: date) -> str:
     # produces: raw/dex_market_share/date=2026-06-03/defillama_20260603.json
     iso = snapshot_date.isoformat()
-    compact = date_to_compact(snapshot_date)
-    return f"raw/dex_market_share/date={iso}/defillama_{compact}.json"
+    return f"raw/dex_market_share/date={iso}/defillama_{_compact(snapshot_date)}.json"
 
 
 def check_object_exists(bucket_name: str, object_path: str) -> bool:
     client = storage.Client()
-    bucket = client.bucket(bucket_name)
-    blob = bucket.blob(object_path)
-    return bool(blob.exists())
+    return bool(client.bucket(bucket_name).blob(object_path).exists())
 
 
 def write_json_to_gcs(
@@ -39,8 +38,7 @@ def write_json_to_gcs(
     metadata: dict[str, str] | None = None,
 ) -> str:
     client = storage.Client()
-    bucket = client.bucket(bucket_name)
-    blob = bucket.blob(object_path)
+    blob = client.bucket(bucket_name).blob(object_path)
 
     if not overwrite and blob.exists():
         raise FileExistsError(f"gs://{bucket_name}/{object_path} already exists")
@@ -58,10 +56,8 @@ def write_json_to_gcs(
 
 
 def get_object_metadata(bucket_name: str, object_path: str) -> dict[str, str]:
-    # fetches the latest blob state from GCS including its metadata fields
     client = storage.Client()
-    bucket = client.bucket(bucket_name)
-    blob = bucket.blob(object_path)
+    blob = client.bucket(bucket_name).blob(object_path)
     blob.reload()
     return dict(blob.metadata or {})
 

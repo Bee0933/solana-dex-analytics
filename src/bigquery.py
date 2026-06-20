@@ -3,7 +3,7 @@ from typing import Any
 
 from google.cloud import bigquery  # type: ignore[import-untyped]
 
-from src.utils.logging import get_logger
+from src.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -14,7 +14,6 @@ def get_bq_client(project_id: str | None = None) -> bigquery.Client:
 
 
 def get_pools_schema() -> list[bigquery.SchemaField]:
-    # mirrors the unified raw_dex_pools schema from the pre-flight spec
     return [
         bigquery.SchemaField("snapshot_at", "TIMESTAMP", mode="REQUIRED"),
         bigquery.SchemaField("snapshot_date", "DATE", mode="REQUIRED"),
@@ -32,7 +31,6 @@ def get_pools_schema() -> list[bigquery.SchemaField]:
 
 
 def get_market_share_schema() -> list[bigquery.SchemaField]:
-    # mirrors the raw_dex_market_share schema from the pre-flight spec
     return [
         bigquery.SchemaField("snapshot_at", "TIMESTAMP", mode="REQUIRED"),
         bigquery.SchemaField("snapshot_date", "DATE", mode="REQUIRED"),
@@ -124,7 +122,7 @@ def load_rows(
     rows: list[dict[str, Any]],
     schema: list[bigquery.SchemaField],
 ) -> tuple[int, str]:
-    # WRITE_APPEND adds to the table, does not overwrites the whole thing
+    # WRITE_APPEND adds to the table, does not overwrite the whole thing
     job_config = bigquery.LoadJobConfig(
         schema=schema,
         write_disposition=bigquery.WriteDisposition.WRITE_APPEND,
