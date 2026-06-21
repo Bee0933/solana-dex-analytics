@@ -47,3 +47,8 @@ output "scheduler_job" {
   description = "Cloud Scheduler job name"
   value       = google_cloud_scheduler_job.daily.name
 }
+
+output "grafana_reader_sa" {
+  description = "Grafana BigQuery reader service account email"
+  value       = google_service_account.grafana_bigquery_reader.email
+}

@@ -93,9 +93,8 @@ resource "google_cloud_scheduler_job" "daily" {
   depends_on = [google_project_service.services]
 }
 
-# --- IAM for the pipeline SA (reused for both running the job and CI/CD) ---
-
-# run the job (Scheduler) + deploy new revisions (CI). run.developer covers both.
+# IAM for the pipeline SA
+# run the job (Scheduler) + deploy new revisions (CI
 resource "google_project_iam_member" "pipeline_run_developer" {
   project = var.project_id
   role    = "roles/run.developer"
