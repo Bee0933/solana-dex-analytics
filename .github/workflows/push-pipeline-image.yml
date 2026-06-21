@@ -1,4 +1,4 @@
-name: build-and-deploy
+name: push-pipeline-image
 
 # Build the image and deploy it to the Cloud Run Job whenever the pipeline code,
 # dbt project, or build files change on main.
@@ -11,7 +11,7 @@ on:
       - "docker/**"
       - "pyproject.toml"
       - "uv.lock"
-      - ".github/workflows/deploy.yml"
+      - ".github/workflows/push-pipeline-image.yml"
 
 permissions:
   contents: read

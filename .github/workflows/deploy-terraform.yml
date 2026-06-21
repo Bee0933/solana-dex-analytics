@@ -1,0 +1,44 @@
+name: deploy-terraform
+
+# Plan on PRs that touch infra; apply automatically when they merge to main.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "terraform/**"
+      - ".github/workflows/deploy-terraform.yml"
+  pull_request:
+    paths:
+      - "terraform/**"
+      - ".github/workflows/deploy-terraform.yml"
+
+permissions:
+  contents: read
+  id-token: write # required for Workload Identity Federation
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform
+    steps:
+      - uses: actions/checkout@v4
+
+      # authenticate as the deployer SA via WIF (no key files)
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/983170179180/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
+          service_account: terraform-deployer-sa@solana-analytics-498121.iam.gserviceaccount.com
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - run: terraform init
+      - run: terraform fmt -check
+      - run: terraform validate
+      - run: terraform plan -no-color
+
+      # only apply on a real merge to main, never on PRs
+      - name: Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve
