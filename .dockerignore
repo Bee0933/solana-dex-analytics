@@ -1,0 +1,16 @@
+.git/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+tests/
+terraform/
+.github/
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+*.md
+.env*
+credentials*.json

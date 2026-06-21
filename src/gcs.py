@@ -4,9 +4,16 @@ from typing import Any
 
 from google.cloud import storage  # type: ignore[import-untyped,attr-defined]
 
+from src.config import settings
 from src.logging import get_logger
 
 logger = get_logger(__name__)
+
+
+def _client() -> storage.Client:
+    # pass the project explicitly so it works with user ADC locally (Cloud Run can
+    # auto-detect it, but a local login can't)
+    return storage.Client(project=settings.gcp_project_id or None)
 
 
 def _compact(d: date) -> str:
@@ -26,7 +33,7 @@ def build_market_share_partition_path(snapshot_date: date) -> str:
 
 
 def check_object_exists(bucket_name: str, object_path: str) -> bool:
-    client = storage.Client()
+    client = _client()
     return bool(client.bucket(bucket_name).blob(object_path).exists())
 
 
@@ -37,7 +44,7 @@ def write_json_to_gcs(
     overwrite: bool = False,
     metadata: dict[str, str] | None = None,
 ) -> str:
-    client = storage.Client()
+    client = _client()
     blob = client.bucket(bucket_name).blob(object_path)
 
     if not overwrite and blob.exists():
@@ -56,7 +63,7 @@ def write_json_to_gcs(
 
 
 def get_object_metadata(bucket_name: str, object_path: str) -> dict[str, str]:
-    client = storage.Client()
+    client = _client()
     blob = client.bucket(bucket_name).blob(object_path)
     blob.reload()
     return dict(blob.metadata or {})
@@ -66,6 +73,6 @@ def read_json_from_gcs(uri: str) -> dict[str, Any]:
     # parse gs://bucket/path/to/file.json into its components
     without_scheme = uri.removeprefix("gs://")
     bucket_name, _, object_path = without_scheme.partition("/")
-    client = storage.Client()
+    client = _client()
     blob = client.bucket(bucket_name).blob(object_path)
     return dict(json.loads(blob.download_as_text()))
