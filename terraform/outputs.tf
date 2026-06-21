@@ -37,3 +37,13 @@ output "workload_identity_provider" {
   description = "Workload Identity Provider resource name for GitHub Actions"
   value       = google_iam_workload_identity_pool_provider.github.name
 }
+
+output "cloud_run_job" {
+  description = "Cloud Run Job name"
+  value       = google_cloud_run_v2_job.pipeline.name
+}
+
+output "scheduler_job" {
+  description = "Cloud Scheduler job name"
+  value       = google_cloud_scheduler_job.daily.name
+}

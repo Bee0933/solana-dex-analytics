@@ -85,13 +85,6 @@ resource "google_project_iam_member" "pipeline_bq_job_user" {
   member  = "serviceAccount:${google_service_account.pipeline.email}"
 }
 
-resource "google_secret_manager_secret_iam_member" "pipeline_secret_accessor" {
-  project   = var.project_id
-  secret_id = google_secret_manager_secret.prefect_api_key.secret_id
-  role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:${google_service_account.pipeline.email}"
-}
-
 # Artifact Registry
 resource "google_artifact_registry_repository" "pipeline" {
   repository_id = "solana-pipeline"
@@ -104,18 +97,7 @@ resource "google_artifact_registry_repository" "pipeline" {
   }
 }
 
-# Secret Manager
-resource "google_secret_manager_secret" "prefect_api_key" {
-  secret_id = "prefect-api-key"
-  project   = var.project_id
-
-  replication {
-    auto {}
-  }
-}
-
-
-# Workload Identity Federation (GitHub Actions
+# Workload Identity Federation (GitHub Actions)
 resource "google_iam_workload_identity_pool" "github" {
   workload_identity_pool_id = "github-actions-pool"
   project                   = var.project_id

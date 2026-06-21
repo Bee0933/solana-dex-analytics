@@ -24,12 +24,6 @@ variable "github_repo" {
   description = "GitHub repository in org/repo format — used for Workload Identity Federation"
 }
 
-variable "prefect_api_url" {
-  type        = string
-  description = "Prefect Cloud API base URL"
-  default     = "https://api.prefect.cloud/api"
-}
-
 variable "notification_email" {
   type        = string
   description = "Email address for pipeline failure alerts"

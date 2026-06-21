@@ -1,0 +1,56 @@
+name: build-and-deploy
+
+# Build the image and deploy it to the Cloud Run Job whenever the pipeline code,
+# dbt project, or build files change on main.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "dbt/**"
+      - "docker/**"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".github/workflows/deploy.yml"
+
+permissions:
+  contents: read
+  id-token: write # required for Workload Identity Federation
+
+env:
+  PROJECT_ID: solana-analytics-498121
+  REGION: europe-west3
+  JOB: solana-daily
+  IMAGE: europe-west3-docker.pkg.dev/solana-analytics-498121/solana-pipeline/solana-pipeline
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # authenticate to GCP via WIF (no service-account key files)
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/983170179180/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
+          service_account: solana-pipeline-sa@solana-analytics-498121.iam.gserviceaccount.com
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${REGION}-docker.pkg.dev --quiet
+
+      # tag with the commit SHA (immutable, for rollback) and latest
+      - name: Build and push image
+        run: |
+          docker build --platform linux/amd64 -f docker/Dockerfile \
+            -t $IMAGE:${{ github.sha }} -t $IMAGE:latest .
+          docker push $IMAGE:${{ github.sha }}
+          docker push $IMAGE:latest
+
+      # point the Cloud Run Job at the new image
+      - name: Deploy to Cloud Run Job
+        run: |
+          gcloud run jobs update $JOB \
+            --image $IMAGE:${{ github.sha }} \
+            --region $REGION
