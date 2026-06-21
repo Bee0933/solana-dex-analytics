@@ -7,14 +7,16 @@ resource "google_service_account" "terraform" {
   project      = var.project_id
 }
 
-# editor covers most resources; the IAM-admin roles below cover what editor can't
-# (service accounts, project IAM bindings, workload identity pools).
+# editor covers most resources; the roles below cover what editor can't —
+# managing service accounts, project IAM bindings, workload identity pools, and
+# BigQuery dataset IAM (dataset ACLs need bigquery.datasets.update).
 resource "google_project_iam_member" "terraform_roles" {
   for_each = toset([
     "roles/editor",
     "roles/iam.serviceAccountAdmin",
     "roles/resourcemanager.projectIamAdmin",
     "roles/iam.workloadIdentityPoolAdmin",
+    "roles/bigquery.admin",
   ])
   project = var.project_id
   role    = each.value
