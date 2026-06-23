@@ -1,326 +1,1206 @@
 {
-  "__inputs": [
+  "annotations": [
     {
-      "name": "DS_BIGQUERY",
-      "label": "BigQuery",
-      "description": "Google BigQuery datasource for Solana analytics",
-      "type": "datasource",
-      "pluginId": "grafana-bigquery-datasource",
-      "pluginName": "Google BigQuery"
+      "kind": "AnnotationQuery",
+      "spec": {
+        "builtIn": true,
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "query": {
+          "datasource": {
+            "name": "-- Grafana --"
+          },
+          "group": "grafana",
+          "kind": "DataQuery",
+          "spec": {},
+          "version": "v0"
+        }
+      }
     }
   ],
-  "__requires": [
-    { "type": "grafana", "id": "grafana", "name": "Grafana", "version": "11.0.0" },
-    { "type": "datasource", "id": "grafana-bigquery-datasource", "name": "Google BigQuery", "version": "2.0.0" },
-    { "type": "panel", "id": "stat", "name": "Stat", "version": "" },
-    { "type": "panel", "id": "timeseries", "name": "Time series", "version": "" },
-    { "type": "panel", "id": "table", "name": "Table", "version": "" },
-    { "type": "panel", "id": "barchart", "name": "Bar chart", "version": "" }
-  ],
-  "annotations": { "list": [] },
+  "cursorSync": "Crosshair",
   "editable": true,
-  "fiscalYearStartMonth": 0,
-  "graphTooltip": 1,
-  "id": null,
+  "elements": {
+    "panel-1": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "dfoozen4vpaf4e"
+                    },
+                    "group": "grafana-bigquery-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "editorMode": "code",
+                      "format": "table",
+                      "location": "europe-west3",
+                      "rawQuery": true,
+                      "rawSql": "SELECT SUM(trailing_24h_fees_usd) AS total_24h_fees\nFROM `${project}.solana_marts.fct_pool_trailing_24h`\nWHERE snapshot_date = (SELECT MAX(snapshot_date) FROM `${project}.solana_marts.fct_pool_trailing_24h`)\n  AND dex_name IN (${dex_name:singlequote})"
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Sum of trailing 24h LP fees across selected DEXs at the latest snapshot.",
+        "id": 1,
+        "links": [],
+        "title": "24h Fees Traded",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "blue",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "currencyUSD"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "last"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "value",
+              "wideLayout": true
+            }
+          },
+          "version": "13.1.0-27822252871"
+        }
+      }
+    },
+    "panel-2": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "dfoozen4vpaf4e"
+                    },
+                    "group": "grafana-bigquery-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "editorMode": "code",
+                      "format": "table",
+                      "location": "europe-west3",
+                      "rawQuery": true,
+                      "rawSql": "SELECT SUM(trailing_24h_volume_usd) AS total_24h_volume\nFROM `${project}.solana_marts.fct_pool_trailing_24h`\nWHERE snapshot_date = (SELECT MAX(snapshot_date) FROM `${project}.solana_marts.fct_pool_trailing_24h`)\n  AND dex_name IN (${dex_name:singlequote})"
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Sum of trailing 24h pool volume at the latest snapshot.",
+        "id": 2,
+        "links": [],
+        "title": "24h Volume Traded",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "blue",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "currencyUSD"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "last"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "value",
+              "wideLayout": true
+            }
+          },
+          "version": "13.1.0-27822252871"
+        }
+      }
+    },
+    "panel-3": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "dfoozen4vpaf4e"
+                    },
+                    "group": "grafana-bigquery-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "editorMode": "code",
+                      "format": "table",
+                      "location": "europe-west3",
+                      "rawQuery": true,
+                      "rawSql": "SELECT SUM(tvl_usd) AS total_tvl\nFROM `${project}.solana_marts.fct_pool_trailing_24h`\nWHERE snapshot_date = (SELECT MAX(snapshot_date) FROM `${project}.solana_marts.fct_pool_trailing_24h`)\n  AND dex_name IN (${dex_name:singlequote})"
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Total value locked across selected DEXs at the latest snapshot.",
+        "id": 3,
+        "links": [],
+        "title": "Total TVL",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "blue",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "currencyUSD"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "last"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "value",
+              "wideLayout": true
+            }
+          },
+          "version": "13.1.0-27822252871"
+        }
+      }
+    },
+    "panel-4": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "dfoozen4vpaf4e"
+                    },
+                    "group": "grafana-bigquery-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "editorMode": "code",
+                      "format": "table",
+                      "location": "europe-west3",
+                      "rawQuery": true,
+                      "rawSql": "SELECT COUNT(DISTINCT pool_address) AS active_pools\nFROM `${project}.solana_marts.fct_pool_trailing_24h`\nWHERE snapshot_date = (SELECT MAX(snapshot_date) FROM `${project}.solana_marts.fct_pool_trailing_24h`)\n  AND dex_name IN (${dex_name:singlequote})"
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Distinct pools with activity at the latest snapshot.",
+        "id": 4,
+        "links": [],
+        "title": "Active Pools",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "blue",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "last"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "value",
+              "wideLayout": true
+            }
+          },
+          "version": "13.1.0-27822252871"
+        }
+      }
+    },
+    "panel-5": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "dfoozen4vpaf4e"
+                    },
+                    "group": "grafana-bigquery-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "editorMode": "code",
+                      "format": "table",
+                      "location": "europe-west3",
+                      "rawQuery": true,
+                      "rawSql": "SELECT\n  CONCAT(COALESCE(base_token_symbol,'?'),'/',COALESCE(quote_token_symbol,'?'),' · ',dex_name) AS pool,\n  SUM(trailing_24h_fees_usd) AS fees_window\nFROM `${project}.solana_marts.fct_pool_trailing_24h`\nWHERE $__timeFilter(TIMESTAMP(snapshot_date))\n  AND dex_name IN (${dex_name:singlequote})\nGROUP BY pool\nORDER BY fees_window DESC\nLIMIT 20"
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Pools generating the most fees over the selected window — where LP returns concentrate.",
+        "id": 5,
+        "links": [],
+        "title": "Top 20 Pools by Fee Revenue",
+        "vizConfig": {
+          "group": "barchart",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "continuous-BlPu"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "fillOpacity": 80,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "lineWidth": 1,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "currencyUSD"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "fees_window"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Total Fees"
+                    }
+                  ]
+                }
+              ]
+            },
+            "options": {
+              "barRadius": 0,
+              "barWidth": 0.97,
+              "fullHighlight": false,
+              "groupWidth": 0.7,
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": false
+              },
+              "orientation": "horizontal",
+              "showValue": "auto",
+              "stacking": "none",
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "multi",
+                "sort": "desc"
+              },
+              "xField": "pool",
+              "xTickLabelRotation": 0,
+              "xTickLabelSpacing": 0
+            }
+          },
+          "version": "13.1.0-27822252871"
+        }
+      }
+    },
+    "panel-6": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "dfoozen4vpaf4e"
+                    },
+                    "group": "grafana-bigquery-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "editorMode": "code",
+                      "format": "table",
+                      "location": "europe-west3",
+                      "rawQuery": true,
+                      "rawSql": "WITH latest AS (\n  SELECT pool_address, base_token_symbol, quote_token_symbol, dex_name, fee_rate_pct,\n         ROW_NUMBER() OVER (PARTITION BY pool_address ORDER BY snapshot_date DESC) rn\n  FROM `${project}.solana_marts.fct_pool_trailing_24h`\n)\nSELECT\n  CONCAT(COALESCE(l.base_token_symbol,'?'),'/',COALESCE(l.quote_token_symbol,'?'),' · ',l.dex_name) AS pool,\n  l.fee_rate_pct\nFROM latest l\nJOIN `${project}.solana_marts.dim_pool` p USING (pool_address)\nWHERE l.rn = 1\n  AND p.snapshot_days_count >= ${min_active_days}\nORDER BY l.fee_rate_pct DESC\nLIMIT 25"
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Fee rate of established pools (filtered by minimum active days).",
+        "id": 6,
+        "links": [],
+        "title": "Pool Fee Rate Comparison",
+        "vizConfig": {
+          "group": "barchart",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "continuous-GrYlRd"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "fillOpacity": 80,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "lineWidth": 1,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "percent"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "fee_rate_pct"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Fee Rate %"
+                    }
+                  ]
+                }
+              ]
+            },
+            "options": {
+              "barRadius": 0,
+              "barWidth": 0.97,
+              "fullHighlight": false,
+              "groupWidth": 0.7,
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": false
+              },
+              "orientation": "horizontal",
+              "showValue": "auto",
+              "stacking": "none",
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "multi",
+                "sort": "desc"
+              },
+              "xField": "pool",
+              "xTickLabelRotation": 0,
+              "xTickLabelSpacing": 0
+            }
+          },
+          "version": "13.1.0-27822252871"
+        }
+      }
+    },
+    "panel-7": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "dfoozen4vpaf4e"
+                    },
+                    "group": "grafana-bigquery-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "editorMode": "code",
+                      "format": "table",
+                      "location": "europe-west3",
+                      "rawQuery": true,
+                      "rawSql": "WITH latest AS (\n  SELECT pool_address, base_token_symbol, quote_token_symbol, dex_name,\n         trailing_24h_volume_usd, tvl_usd, volume_to_tvl_ratio,\n         ROW_NUMBER() OVER (PARTITION BY pool_address ORDER BY snapshot_date DESC) rn\n  FROM `${project}.solana_marts.fct_pool_trailing_24h`\n)\nSELECT\n  CONCAT(COALESCE(base_token_symbol,'?'),'/',COALESCE(quote_token_symbol,'?')) AS pool,\n  dex_name, trailing_24h_volume_usd, tvl_usd, volume_to_tvl_ratio\nFROM latest\nWHERE rn = 1\n  AND dex_name IN (${dex_name:singlequote})\nORDER BY volume_to_tvl_ratio DESC\nLIMIT 50"
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Highest volume-to-TVL pools — the most capital-efficient places to provide liquidity.",
+        "id": 7,
+        "links": [],
+        "title": "Capital Efficiency Leaderboard (Volume / TVL)",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "footer": {
+                    "reducers": []
+                  },
+                  "inspect": false
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "pool"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Pool"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "dex_name"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "DEX"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "trailing_24h_volume_usd"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "currencyUSD"
+                    },
+                    {
+                      "id": "displayName",
+                      "value": "24h Volume"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "tvl_usd"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "currencyUSD"
+                    },
+                    {
+                      "id": "displayName",
+                      "value": "TVL"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "volume_to_tvl_ratio"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "short"
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "mode": "gradient",
+                        "type": "color-background"
+                      }
+                    },
+                    {
+                      "id": "color",
+                      "value": {
+                        "mode": "continuous-GrYlRd"
+                      }
+                    },
+                    {
+                      "id": "displayName",
+                      "value": "Volume / TVL"
+                    }
+                  ]
+                }
+              ]
+            },
+            "options": {
+              "cellHeight": "sm",
+              "showHeader": true,
+              "sortBy": [
+                {
+                  "desc": true,
+                  "displayName": "Volume / TVL"
+                }
+              ]
+            }
+          },
+          "version": "13.1.0-27822252871"
+        }
+      }
+    },
+    "panel-8": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "dfoozen4vpaf4e"
+                    },
+                    "group": "grafana-bigquery-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "editorMode": "code",
+                      "format": "table",
+                      "location": "europe-west3",
+                      "rawQuery": true,
+                      "rawSql": "SELECT snapshot_date AS time, volume_7d_avg\nFROM `${project}.solana_marts.fct_pool_trailing_24h`\nWHERE $__timeFilter(TIMESTAMP(snapshot_date))\n  AND pool_address = '${pool_address}'\nORDER BY snapshot_date"
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Pick a pool to see its smoothed volume trend over time.",
+        "id": 8,
+        "links": [],
+        "title": "Selected Pool, 7-Day Avg Volume Trajectory",
+        "vizConfig": {
+          "group": "timeseries",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 25,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 2,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "showValues": false,
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "currencyUSD"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "volume_7d_avg"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "7d Avg Volume"
+                    }
+                  ]
+                }
+              ]
+            },
+            "options": {
+              "annotations": {
+                "clustering": -1,
+                "multiLane": false
+              },
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "enableFacetedFilter": false,
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "multi",
+                "sort": "desc"
+              }
+            }
+          },
+          "version": "13.1.0-27822252871"
+        }
+      }
+    }
+  },
+  "layout": {
+    "kind": "GridLayout",
+    "spec": {
+      "items": [
+        {
+          "kind": "GridLayoutItem",
+          "spec": {
+            "element": {
+              "kind": "ElementReference",
+              "name": "panel-1"
+            },
+            "height": 4,
+            "width": 6,
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "kind": "GridLayoutItem",
+          "spec": {
+            "element": {
+              "kind": "ElementReference",
+              "name": "panel-2"
+            },
+            "height": 4,
+            "width": 6,
+            "x": 6,
+            "y": 0
+          }
+        },
+        {
+          "kind": "GridLayoutItem",
+          "spec": {
+            "element": {
+              "kind": "ElementReference",
+              "name": "panel-3"
+            },
+            "height": 4,
+            "width": 6,
+            "x": 12,
+            "y": 0
+          }
+        },
+        {
+          "kind": "GridLayoutItem",
+          "spec": {
+            "element": {
+              "kind": "ElementReference",
+              "name": "panel-4"
+            },
+            "height": 4,
+            "width": 6,
+            "x": 18,
+            "y": 0
+          }
+        },
+        {
+          "kind": "GridLayoutItem",
+          "spec": {
+            "element": {
+              "kind": "ElementReference",
+              "name": "panel-5"
+            },
+            "height": 16,
+            "width": 12,
+            "x": 0,
+            "y": 4
+          }
+        },
+        {
+          "kind": "GridLayoutItem",
+          "spec": {
+            "element": {
+              "kind": "ElementReference",
+              "name": "panel-7"
+            },
+            "height": 31,
+            "width": 12,
+            "x": 12,
+            "y": 4
+          }
+        },
+        {
+          "kind": "GridLayoutItem",
+          "spec": {
+            "element": {
+              "kind": "ElementReference",
+              "name": "panel-6"
+            },
+            "height": 15,
+            "width": 12,
+            "x": 0,
+            "y": 20
+          }
+        },
+        {
+          "kind": "GridLayoutItem",
+          "spec": {
+            "element": {
+              "kind": "ElementReference",
+              "name": "panel-8"
+            },
+            "height": 9,
+            "width": 24,
+            "x": 0,
+            "y": 35
+          }
+        }
+      ]
+    }
+  },
   "links": [],
   "liveNow": false,
-  "panels": [
-    {
-      "id": 1,
-      "type": "stat",
-      "title": "Total 24h Fees",
-      "description": "Sum of trailing 24h LP fees across selected DEXs at the latest snapshot.",
-      "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 },
-      "options": {
-        "colorMode": "value", "graphMode": "area", "textMode": "value_and_name",
-        "reduceOptions": { "calcs": ["last"], "fields": "", "values": false }
-      },
-      "fieldConfig": {
-        "defaults": { "unit": "currencyUSD", "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] } },
-        "overrides": []
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-          "editorMode": "code", "rawQuery": true, "format": "table", "location": "europe-west3",
-          "rawSql": "SELECT SUM(trailing_24h_fees_usd) AS total_24h_fees\nFROM `${project}.solana_marts.fct_pool_trailing_24h`\nWHERE snapshot_date = (SELECT MAX(snapshot_date) FROM `${project}.solana_marts.fct_pool_trailing_24h`)\n  AND dex_name IN (${dex_name:singlequote})"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "type": "stat",
-      "title": "Total 24h Volume",
-      "description": "Sum of trailing 24h pool volume at the latest snapshot.",
-      "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-      "gridPos": { "x": 6, "y": 0, "w": 6, "h": 4 },
-      "options": {
-        "colorMode": "value", "graphMode": "area", "textMode": "value_and_name",
-        "reduceOptions": { "calcs": ["last"], "fields": "", "values": false }
-      },
-      "fieldConfig": {
-        "defaults": { "unit": "currencyUSD", "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] } },
-        "overrides": []
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-          "editorMode": "code", "rawQuery": true, "format": "table", "location": "europe-west3",
-          "rawSql": "SELECT SUM(trailing_24h_volume_usd) AS total_24h_volume\nFROM `${project}.solana_marts.fct_pool_trailing_24h`\nWHERE snapshot_date = (SELECT MAX(snapshot_date) FROM `${project}.solana_marts.fct_pool_trailing_24h`)\n  AND dex_name IN (${dex_name:singlequote})"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "type": "stat",
-      "title": "Total TVL",
-      "description": "Total value locked across selected DEXs at the latest snapshot.",
-      "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-      "gridPos": { "x": 12, "y": 0, "w": 6, "h": 4 },
-      "options": {
-        "colorMode": "value", "graphMode": "area", "textMode": "value_and_name",
-        "reduceOptions": { "calcs": ["last"], "fields": "", "values": false }
-      },
-      "fieldConfig": {
-        "defaults": { "unit": "currencyUSD", "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] } },
-        "overrides": []
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-          "editorMode": "code", "rawQuery": true, "format": "table", "location": "europe-west3",
-          "rawSql": "SELECT SUM(tvl_usd) AS total_tvl\nFROM `${project}.solana_marts.fct_pool_trailing_24h`\nWHERE snapshot_date = (SELECT MAX(snapshot_date) FROM `${project}.solana_marts.fct_pool_trailing_24h`)\n  AND dex_name IN (${dex_name:singlequote})"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "type": "stat",
-      "title": "Active Pools",
-      "description": "Distinct pools with activity at the latest snapshot.",
-      "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-      "gridPos": { "x": 18, "y": 0, "w": 6, "h": 4 },
-      "options": {
-        "colorMode": "value", "graphMode": "area", "textMode": "value_and_name",
-        "reduceOptions": { "calcs": ["last"], "fields": "", "values": false }
-      },
-      "fieldConfig": {
-        "defaults": { "unit": "short", "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] } },
-        "overrides": []
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-          "editorMode": "code", "rawQuery": true, "format": "table", "location": "europe-west3",
-          "rawSql": "SELECT COUNT(DISTINCT pool_address) AS active_pools\nFROM `${project}.solana_marts.fct_pool_trailing_24h`\nWHERE snapshot_date = (SELECT MAX(snapshot_date) FROM `${project}.solana_marts.fct_pool_trailing_24h`)\n  AND dex_name IN (${dex_name:singlequote})"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "type": "barchart",
-      "title": "Top 20 Pools by Fee Revenue",
-      "description": "Pools generating the most fees over the selected window — where LP returns concentrate.",
-      "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-      "gridPos": { "x": 0, "y": 4, "w": 12, "h": 10 },
-      "options": {
-        "orientation": "horizontal",
-        "xField": "pool",
-        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": false },
-        "tooltip": { "mode": "multi", "sort": "desc" }
-      },
-      "fieldConfig": {
-        "defaults": { "unit": "currencyUSD", "color": { "mode": "continuous-BlPu" } },
-        "overrides": []
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-          "editorMode": "code", "rawQuery": true, "format": "table", "location": "europe-west3",
-          "rawSql": "SELECT\n  CONCAT(COALESCE(base_token_symbol,'?'),'/',COALESCE(quote_token_symbol,'?'),' · ',dex_name) AS pool,\n  SUM(trailing_24h_fees_usd) AS fees_window\nFROM `${project}.solana_marts.fct_pool_trailing_24h`\nWHERE $__timeFilter(TIMESTAMP(snapshot_date))\n  AND dex_name IN (${dex_name:singlequote})\nGROUP BY pool\nORDER BY fees_window DESC\nLIMIT 20"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "type": "barchart",
-      "title": "Pool Fee Rate Comparison",
-      "description": "Fee rate of established pools (filtered by minimum active days).",
-      "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-      "gridPos": { "x": 0, "y": 14, "w": 12, "h": 9 },
-      "options": {
-        "orientation": "horizontal",
-        "xField": "pool",
-        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": false },
-        "tooltip": { "mode": "multi", "sort": "desc" }
-      },
-      "fieldConfig": {
-        "defaults": { "unit": "percent", "color": { "mode": "continuous-GrYlRd" } },
-        "overrides": []
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-          "editorMode": "code", "rawQuery": true, "format": "table", "location": "europe-west3",
-          "rawSql": "WITH latest AS (\n  SELECT pool_address, base_token_symbol, quote_token_symbol, dex_name, fee_rate_pct,\n         ROW_NUMBER() OVER (PARTITION BY pool_address ORDER BY snapshot_date DESC) rn\n  FROM `${project}.solana_marts.fct_pool_trailing_24h`\n)\nSELECT\n  CONCAT(COALESCE(l.base_token_symbol,'?'),'/',COALESCE(l.quote_token_symbol,'?'),' · ',l.dex_name) AS pool,\n  l.fee_rate_pct\nFROM latest l\nJOIN `${project}.solana_marts.dim_pool` p USING (pool_address)\nWHERE l.rn = 1\n  AND p.snapshot_days_count >= ${min_active_days}\nORDER BY l.fee_rate_pct DESC\nLIMIT 25"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "type": "table",
-      "title": "Capital Efficiency Leaderboard (Volume / TVL)",
-      "description": "Highest volume-to-TVL pools — the most capital-efficient places to provide liquidity.",
-      "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-      "gridPos": { "x": 12, "y": 4, "w": 12, "h": 19 },
-      "options": {
-        "showHeader": true,
-        "sortBy": [{ "displayName": "volume_to_tvl_ratio", "desc": true }]
-      },
-      "fieldConfig": {
-        "defaults": { "custom": { "align": "auto", "filterable": true } },
-        "overrides": [
-          { "matcher": { "id": "byName", "options": "trailing_24h_volume_usd" }, "properties": [{ "id": "unit", "value": "currencyUSD" }] },
-          { "matcher": { "id": "byName", "options": "tvl_usd" }, "properties": [{ "id": "unit", "value": "currencyUSD" }] },
-          {
-            "matcher": { "id": "byName", "options": "volume_to_tvl_ratio" },
-            "properties": [
-              { "id": "unit", "value": "short" },
-              { "id": "custom.cellOptions", "value": { "type": "color-background", "mode": "gradient" } },
-              { "id": "color", "value": { "mode": "continuous-GrYlRd" } }
-            ]
-          }
-        ]
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-          "editorMode": "code", "rawQuery": true, "format": "table", "location": "europe-west3",
-          "rawSql": "WITH latest AS (\n  SELECT pool_address, base_token_symbol, quote_token_symbol, dex_name,\n         trailing_24h_volume_usd, tvl_usd, volume_to_tvl_ratio,\n         ROW_NUMBER() OVER (PARTITION BY pool_address ORDER BY snapshot_date DESC) rn\n  FROM `${project}.solana_marts.fct_pool_trailing_24h`\n)\nSELECT\n  CONCAT(COALESCE(base_token_symbol,'?'),'/',COALESCE(quote_token_symbol,'?')) AS pool,\n  dex_name, trailing_24h_volume_usd, tvl_usd, volume_to_tvl_ratio\nFROM latest\nWHERE rn = 1\n  AND dex_name IN (${dex_name:singlequote})\nORDER BY volume_to_tvl_ratio DESC\nLIMIT 50"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "type": "timeseries",
-      "title": "Selected Pool — 7-Day Avg Volume Trajectory",
-      "description": "Pick a pool to see its smoothed volume trend over time.",
-      "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-      "gridPos": { "x": 0, "y": 23, "w": 24, "h": 9 },
-      "options": {
-        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
-        "tooltip": { "mode": "multi", "sort": "desc" }
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "currencyUSD",
-          "custom": { "drawStyle": "line", "fillOpacity": 25, "lineWidth": 2, "spanNulls": false, "showPoints": "never" },
-          "color": { "mode": "palette-classic" }
-        },
-        "overrides": []
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-          "editorMode": "code", "rawQuery": true, "format": "table", "location": "europe-west3",
-          "rawSql": "SELECT snapshot_date AS time, volume_7d_avg\nFROM `${project}.solana_marts.fct_pool_trailing_24h`\nWHERE $__timeFilter(TIMESTAMP(snapshot_date))\n  AND pool_address = '${pool_address}'\nORDER BY snapshot_date"
-        }
-      ]
-    }
+  "preload": false,
+  "tags": [
+    "solana",
+    "dex",
+    "analytics",
+    "liquidity"
   ],
-  "refresh": "12h",
-  "schemaVersion": 39,
-  "tags": ["solana", "dex", "analytics", "liquidity"],
-  "templating": {
-    "list": [
-      {
-        "name": "project",
-        "type": "constant",
-        "label": "Project",
-        "hide": 2,
-        "query": "solana-analytics-498121",
-        "current": { "selected": false, "text": "solana-analytics-498121", "value": "solana-analytics-498121" }
-      },
-      {
-        "name": "dex_name",
-        "type": "query",
-        "label": "DEX",
-        "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-        "includeAll": true,
-        "multi": true,
-        "refresh": 2,
-        "sort": 1,
-        "current": { "selected": true, "text": ["All"], "value": ["$__all"] },
-        "definition": "SELECT DISTINCT dex_name FROM `${project}.solana_marts.fct_pool_trailing_24h`",
-        "query": {
-          "rawQuery": true,
-          "rawSql": "SELECT DISTINCT dex_name FROM `${project}.solana_marts.fct_pool_trailing_24h`",
-          "format": "table",
-          "location": "europe-west3",
-          "editorMode": "code"
-        }
-      },
-      {
-        "name": "base_token_symbol",
-        "type": "query",
-        "label": "Base Token",
-        "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-        "includeAll": true,
-        "multi": true,
-        "refresh": 2,
-        "sort": 1,
-        "current": { "selected": true, "text": ["All"], "value": ["$__all"] },
-        "definition": "SELECT DISTINCT base_token_symbol FROM `${project}.solana_marts.fct_pool_trailing_24h` WHERE base_token_symbol IS NOT NULL",
-        "query": {
-          "rawQuery": true,
-          "rawSql": "SELECT DISTINCT base_token_symbol FROM `${project}.solana_marts.fct_pool_trailing_24h` WHERE base_token_symbol IS NOT NULL",
-          "format": "table",
-          "location": "europe-west3",
-          "editorMode": "code"
-        }
-      },
-      {
-        "name": "pool_address",
-        "type": "query",
-        "label": "Pool",
-        "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
-        "includeAll": false,
-        "multi": false,
-        "refresh": 2,
-        "sort": 1,
-        "definition": "SELECT CONCAT(base_token_symbol,'/',quote_token_symbol,' · ',dex_name) AS __text, pool_address AS __value FROM `${project}.solana_marts.dim_pool` ORDER BY lifetime_observed_volume_usd DESC LIMIT 500",
-        "query": {
-          "rawQuery": true,
-          "rawSql": "SELECT CONCAT(base_token_symbol,'/',quote_token_symbol,' · ',dex_name) AS __text, pool_address AS __value FROM `${project}.solana_marts.dim_pool` ORDER BY lifetime_observed_volume_usd DESC LIMIT 500",
-          "format": "table",
-          "location": "europe-west3",
-          "editorMode": "code"
-        }
-      },
-      {
-        "name": "min_active_days",
-        "type": "custom",
-        "label": "Min Active Days",
-        "query": "5",
-        "current": { "selected": true, "text": "5", "value": "5" },
-        "options": [{ "selected": true, "text": "5", "value": "5" }]
-      }
-    ]
+  "timeSettings": {
+    "autoRefresh": "12h",
+    "autoRefreshIntervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "fiscalYearStartMonth": 0,
+    "from": "now-3d",
+    "hideTimepicker": false,
+    "timezone": "utc",
+    "to": "now"
   },
-  "time": { "from": "now-30d", "to": "now" },
-  "timepicker": {},
-  "timezone": "utc",
-  "title": "Solana DEX — Liquidity Provider View",
-  "uid": "solana-dex-lp-view",
-  "version": 1,
-  "weekStart": ""
+  "title": "DEX Liquidity Provider View",
+  "variables": [
+    {
+      "kind": "ConstantVariable",
+      "spec": {
+        "current": {
+          "text": "solana-analytics-498121",
+          "value": "solana-analytics-498121"
+        },
+        "hide": "hideVariable",
+        "label": "Project",
+        "name": "project",
+        "query": "solana-analytics-498121",
+        "skipUrlSync": true
+      }
+    },
+    {
+      "kind": "QueryVariable",
+      "spec": {
+        "allowCustomValue": true,
+        "current": {
+          "text": [
+            "orca"
+          ],
+          "value": [
+            "orca"
+          ]
+        },
+        "definition": "SELECT DISTINCT dex_name FROM `${project}.solana_marts.fct_pool_trailing_24h`",
+        "hide": "dontHide",
+        "includeAll": true,
+        "label": "DEX",
+        "multi": true,
+        "name": "dex_name",
+        "options": [],
+        "query": {
+          "datasource": {
+            "name": "dfoozen4vpaf4e"
+          },
+          "group": "grafana-bigquery-datasource",
+          "kind": "DataQuery",
+          "spec": {
+            "editorMode": "code",
+            "format": "table",
+            "location": "europe-west3",
+            "rawQuery": true,
+            "rawSql": "SELECT DISTINCT dex_name FROM `${project}.solana_marts.fct_pool_trailing_24h`"
+          },
+          "version": "v0"
+        },
+        "refresh": "onTimeRangeChanged",
+        "regex": "",
+        "regexApplyTo": "value",
+        "skipUrlSync": false,
+        "sort": "alphabeticalAsc"
+      }
+    },
+    {
+      "kind": "QueryVariable",
+      "spec": {
+        "allowCustomValue": true,
+        "current": {
+          "text": "All",
+          "value": [
+            "$__all"
+          ]
+        },
+        "definition": "SELECT DISTINCT base_token_symbol FROM `${project}.solana_marts.fct_pool_trailing_24h` WHERE base_token_symbol IS NOT NULL",
+        "hide": "dontHide",
+        "includeAll": true,
+        "label": "Base Token",
+        "multi": true,
+        "name": "base_token_symbol",
+        "options": [],
+        "query": {
+          "datasource": {
+            "name": "dfoozen4vpaf4e"
+          },
+          "group": "grafana-bigquery-datasource",
+          "kind": "DataQuery",
+          "spec": {
+            "editorMode": "code",
+            "format": "table",
+            "location": "europe-west3",
+            "rawQuery": true,
+            "rawSql": "SELECT DISTINCT base_token_symbol FROM `${project}.solana_marts.fct_pool_trailing_24h` WHERE base_token_symbol IS NOT NULL"
+          },
+          "version": "v0"
+        },
+        "refresh": "onTimeRangeChanged",
+        "regex": "",
+        "regexApplyTo": "value",
+        "skipUrlSync": false,
+        "sort": "alphabeticalAsc"
+      }
+    },
+    {
+      "kind": "QueryVariable",
+      "spec": {
+        "allowCustomValue": true,
+        "current": {
+          "text": "2KVC/USDC · raydium",
+          "value": "2KVC/USDC · raydium"
+        },
+        "definition": "SELECT CONCAT(base_token_symbol,'/',quote_token_symbol,' · ',dex_name) AS __text, pool_address AS __value FROM `${project}.solana_marts.dim_pool` ORDER BY lifetime_observed_volume_usd DESC LIMIT 500",
+        "hide": "dontHide",
+        "includeAll": false,
+        "label": "Pool",
+        "multi": false,
+        "name": "pool_address",
+        "options": [],
+        "query": {
+          "datasource": {
+            "name": "dfoozen4vpaf4e"
+          },
+          "group": "grafana-bigquery-datasource",
+          "kind": "DataQuery",
+          "spec": {
+            "editorMode": "code",
+            "format": "table",
+            "location": "europe-west3",
+            "rawQuery": true,
+            "rawSql": "SELECT CONCAT(base_token_symbol,'/',quote_token_symbol,' · ',dex_name) AS __text, pool_address AS __value FROM `${project}.solana_marts.dim_pool` ORDER BY lifetime_observed_volume_usd DESC LIMIT 500"
+          },
+          "version": "v0"
+        },
+        "refresh": "onTimeRangeChanged",
+        "regex": "",
+        "regexApplyTo": "value",
+        "skipUrlSync": false,
+        "sort": "alphabeticalAsc"
+      }
+    },
+    {
+      "kind": "CustomVariable",
+      "spec": {
+        "allowCustomValue": true,
+        "current": {
+          "text": "3",
+          "value": "3"
+        },
+        "hide": "dontHide",
+        "includeAll": false,
+        "label": "Min Active Days",
+        "multi": false,
+        "name": "min_active_days",
+        "options": [],
+        "query": "5",
+        "skipUrlSync": false,
+        "valuesFormat": "csv"
+      }
+    }
+  ]
 }
