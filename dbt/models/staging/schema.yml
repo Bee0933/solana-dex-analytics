@@ -45,7 +45,8 @@ models:
   - name: stg_dex_market_share
     description: >
       Cleaned DEX-level market share snapshots — one row per (dex_name, snapshot_date).
-      Casts all columns to explicit types.
+      DefiLlama's protocol-level rows are rolled up to the canonical DEX
+      (raydium/orca/meteora) and their volumes summed. Casts all columns to types.
     columns:
       - name: snapshot_date
         description: "The calendar date this 24-hour window represents"
@@ -53,7 +54,7 @@ models:
       - name: snapshot_at
         description: "Exact UTC timestamp the API was called"
       - name: dex_name
-        description: "Protocol name as returned by DefiLlama (e.g. raydium, orca, meteora dlmm)"
+        description: "Canonical DEX name (raydium/orca/meteora), rolled up from DefiLlama protocols"
         tests: [not_null]
       - name: trailing_24h_volume_usd
         description: "Sum of all swap values in USD on this protocol in the last 24 hours"

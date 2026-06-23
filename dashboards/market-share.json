@@ -1,0 +1,1142 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "solana-dex-market-share",
+    "namespace": "stacks-973109",
+    "uid": "198a84d2-124d-4cd7-ab61-8a822d1d64da",
+    "resourceVersion": "2069375145021014022",
+    "generation": 10,
+    "creationTimestamp": "2026-06-23T09:27:41Z",
+    "labels": {
+      "grafana.app/deprecatedInternalID": "2199449248944128"
+    },
+    "annotations": {
+      "grafana.app/createdBy": "user:edqj1hk6ylgcge",
+      "grafana.app/folder": "fshzqf",
+      "grafana.app/saved-from-ui": "Grafana Cloud",
+      "grafana.app/updatedBy": "user:edqj1hk6ylgcge",
+      "grafana.app/updatedTimestamp": "2026-06-23T11:00:56Z",
+      "grafana.app/folderTitle": "solana-analytics",
+      "grafana.app/folderUrl": "/dashboards/f/fshzqf/solanaanalytics"
+    }
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana",
+            "version": "v0",
+            "datasource": {
+              "name": "-- Grafana --"
+            },
+            "spec": {}
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "builtIn": true
+        }
+      }
+    ],
+    "cursorSync": "Crosshair",
+    "editable": true,
+    "elements": {
+      "panel-1": {
+        "kind": "Panel",
+        "spec": {
+          "id": 1,
+          "title": "Total 24h Volume",
+          "description": "Sum of trailing 24h volume across selected DEXs at the latest snapshot.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-bigquery-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "dfoozen4vpaf4e"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "location": "europe-west3",
+                        "rawQuery": true,
+                        "rawSql": "SELECT SUM(trailing_24h_volume_usd) AS total_24h_volume\nFROM `${project}.solana_marts.fct_dex_market_share_daily`\nWHERE snapshot_date = (SELECT MAX(snapshot_date) FROM `${project}.solana_marts.fct_dex_market_share_daily`)\n  AND dex_name IN (${dex_name:singlequote})"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.1.0-27822252871",
+            "spec": {
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "last"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "value",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "currencyUSD",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "blue"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-2": {
+        "kind": "Panel",
+        "spec": {
+          "id": 2,
+          "title": "Total 7d Volume",
+          "description": "Sum of trailing 7d volume across selected DEXs at the latest snapshot.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-bigquery-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "dfoozen4vpaf4e"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "location": "europe-west3",
+                        "rawQuery": true,
+                        "rawSql": "SELECT SUM(trailing_7d_volume_usd) AS total_7d_volume\nFROM `${project}.solana_marts.fct_dex_market_share_daily`\nWHERE snapshot_date = (SELECT MAX(snapshot_date) FROM `${project}.solana_marts.fct_dex_market_share_daily`)\n  AND dex_name IN (${dex_name:singlequote})"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.1.0-27822252871",
+            "spec": {
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "last"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "value",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "currencyUSD",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "blue"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-3": {
+        "kind": "Panel",
+        "spec": {
+          "id": 3,
+          "title": "Leading DEX Share %",
+          "description": "Market share % of the leading DEX at the latest snapshot.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-bigquery-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "dfoozen4vpaf4e"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "location": "europe-west3",
+                        "rawQuery": true,
+                        "rawSql": "SELECT dex_name, dex_market_share_pct AS leading_share_pct\nFROM `${project}.solana_marts.fct_dex_market_share_daily`\nWHERE snapshot_date = (SELECT MAX(snapshot_date) FROM `${project}.solana_marts.fct_dex_market_share_daily`)\n  AND dex_name IN (${dex_name:singlequote})\nORDER BY dex_market_share_pct DESC\nLIMIT 1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.1.0-27822252871",
+            "spec": {
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "last"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "value",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "percent",
+                  "min": 0,
+                  "max": 100,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "blue"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-4": {
+        "kind": "Panel",
+        "spec": {
+          "id": 4,
+          "title": "24h Volume WoW %",
+          "description": "How today's total volume compares to 7 days ago ",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-bigquery-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "dfoozen4vpaf4e"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "location": "europe-west3",
+                        "rawQuery": true,
+                        "rawSql": "WITH daily AS (\n  SELECT snapshot_date, SUM(trailing_24h_volume_usd) AS v\n  FROM `${project}.solana_marts.fct_dex_market_share_daily`\n  WHERE dex_name IN (${dex_name:singlequote})\n  GROUP BY snapshot_date\n),\nlatest AS (SELECT * FROM daily ORDER BY snapshot_date DESC LIMIT 1)\nSELECT SAFE_DIVIDE(l.v - p.v, p.v) * 100 AS wow_pct\nFROM latest l\nJOIN daily p ON p.snapshot_date = DATE_SUB(l.snapshot_date, INTERVAL 7 DAY)"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.1.0-27822252871",
+            "spec": {
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "last"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "value",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "percent",
+                  "min": 0,
+                  "max": 100,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "red"
+                      },
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-5": {
+        "kind": "Panel",
+        "spec": {
+          "id": 5,
+          "title": "Daily DEX Volume (24h)",
+          "description": "Trailing-24h trading volume per DEX over time.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-bigquery-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "dfoozen4vpaf4e"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "location": "europe-west3",
+                        "rawQuery": true,
+                        "rawSql": "SELECT snapshot_date AS time, dex_name, trailing_24h_volume_usd\nFROM `${project}.solana_marts.fct_dex_market_share_daily`\nWHERE $__timeFilter(TIMESTAMP(snapshot_date))\n  AND dex_name IN (${dex_name:singlequote})\nORDER BY snapshot_date"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "partitionByValues",
+                  "spec": {
+                    "options": {
+                      "fields": [
+                        "dex_name"
+                      ],
+                      "keepFields": false
+                    }
+                  }
+                }
+              ],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.1.0-27822252871",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "currencyUSD",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 25,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 2,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "never",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "normal"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-6": {
+        "kind": "Panel",
+        "spec": {
+          "id": 6,
+          "title": "DEX Market Share % Over Time",
+          "description": "Each DEX's share of total tracked volume, as a 100% stack.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-bigquery-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "dfoozen4vpaf4e"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "location": "europe-west3",
+                        "rawQuery": true,
+                        "rawSql": "SELECT snapshot_date AS time, dex_name, dex_market_share_pct\nFROM `${project}.solana_marts.fct_dex_market_share_daily`\nWHERE $__timeFilter(TIMESTAMP(snapshot_date))\n  AND dex_name IN (${dex_name:singlequote})\nORDER BY snapshot_date"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "partitionByValues",
+                  "spec": {
+                    "options": {
+                      "fields": [
+                        "dex_name"
+                      ],
+                      "keepFields": false
+                    }
+                  }
+                }
+              ],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.1.0-27822252871",
+            "spec": {
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "desc"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "percent",
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 35,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 2,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "never",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "percent"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-7": {
+        "kind": "Panel",
+        "spec": {
+          "id": 7,
+          "title": "Current 24h Volume by DEX",
+          "description": "Latest trailing-24h volume per DEX with 7-day change.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-bigquery-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "dfoozen4vpaf4e"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "location": "europe-west3",
+                        "rawQuery": true,
+                        "rawSql": "WITH latest AS (\n  SELECT dex_name, snapshot_date, trailing_24h_volume_usd,\n         ROW_NUMBER() OVER (PARTITION BY dex_name ORDER BY snapshot_date DESC) rn\n  FROM `${project}.solana_marts.fct_dex_market_share_daily`\n),\nwk_ago AS (\n  SELECT f.dex_name, f.trailing_24h_volume_usd AS vol_7d_ago\n  FROM `${project}.solana_marts.fct_dex_market_share_daily` f\n  JOIN latest l ON f.dex_name = l.dex_name AND f.snapshot_date = DATE_SUB(l.snapshot_date, INTERVAL 7 DAY)\n  WHERE l.rn = 1\n)\nSELECT l.dex_name,\n       l.trailing_24h_volume_usd AS `24h Volume`,\n       SAFE_DIVIDE(l.trailing_24h_volume_usd - w.vol_7d_ago, w.vol_7d_ago) * 100 AS `7d Change`\nFROM latest l\nLEFT JOIN wk_ago w USING (dex_name)\nWHERE l.rn = 1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.1.0-27822252871",
+            "spec": {
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "last"
+                  ],
+                  "fields": "",
+                  "values": true
+                },
+                "showPercentChange": false,
+                "textMode": "value_and_name",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "currencyUSD",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "blue"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds",
+                    "fixedColor": "#ad46ff"
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "7d Change"
+                    },
+                    "properties": [
+                      {
+                        "id": "unit",
+                        "value": "percent"
+                      },
+                      {
+                        "id": "thresholds",
+                        "value": {
+                          "mode": "absolute",
+                          "steps": [
+                            {
+                              "color": "red",
+                              "value": 0
+                            },
+                            {
+                              "color": "green",
+                              "value": 0
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-8": {
+        "kind": "Panel",
+        "spec": {
+          "id": 8,
+          "title": "Share Change vs 7-Day Average",
+          "description": "Which DEXs are gaining or losing share vs their 7-day average.",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "grafana-bigquery-datasource",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "dfoozen4vpaf4e"
+                      },
+                      "spec": {
+                        "editorMode": "code",
+                        "format": "table",
+                        "location": "europe-west3",
+                        "rawQuery": true,
+                        "rawSql": "WITH latest AS (\n  SELECT dex_name, dex_market_share_pct, share_7d_avg, share_change_vs_7d_avg_pct,\n         ROW_NUMBER() OVER (PARTITION BY dex_name ORDER BY snapshot_date DESC) rn\n  FROM `${project}.solana_marts.fct_dex_market_share_daily`\n)\nSELECT dex_name,\n       dex_market_share_pct AS current_share_pct,\n       share_7d_avg         AS avg_7d_share_pct,\n       share_change_vs_7d_avg_pct\nFROM latest\nWHERE rn = 1\nORDER BY share_change_vs_7d_avg_pct DESC"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "table",
+            "version": "13.1.0-27822252871",
+            "spec": {
+              "options": {
+                "cellHeight": "sm",
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": true,
+                    "displayName": "Change vs 7d Avg %"
+                  }
+                ]
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "dex_name"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "DEX"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "current_share_pct"
+                    },
+                    "properties": [
+                      {
+                        "id": "unit",
+                        "value": "percent"
+                      },
+                      {
+                        "id": "min",
+                        "value": 0
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Current Share %"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "avg_7d_share_pct"
+                    },
+                    "properties": [
+                      {
+                        "id": "unit",
+                        "value": "percent"
+                      },
+                      {
+                        "id": "min",
+                        "value": 0
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "7d Avg Share %"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "share_change_vs_7d_avg_pct"
+                    },
+                    "properties": [
+                      {
+                        "id": "unit",
+                        "value": "percent"
+                      },
+                      {
+                        "id": "custom.cellOptions",
+                        "value": {
+                          "mode": "gradient",
+                          "type": "color-background"
+                        }
+                      },
+                      {
+                        "id": "thresholds",
+                        "value": {
+                          "mode": "absolute",
+                          "steps": [
+                            {
+                              "color": "red",
+                              "value": 0
+                            },
+                            {
+                              "color": "green",
+                              "value": 0
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "id": "displayName",
+                        "value": "Change vs 7d Avg %"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "layout": {
+      "kind": "GridLayout",
+      "spec": {
+        "items": [
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 0,
+              "width": 6,
+              "height": 4,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-1"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 6,
+              "y": 0,
+              "width": 6,
+              "height": 4,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-2"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 12,
+              "y": 0,
+              "width": 6,
+              "height": 4,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-3"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 18,
+              "y": 0,
+              "width": 6,
+              "height": 4,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-4"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 4,
+              "width": 5,
+              "height": 9,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-7"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 5,
+              "y": 4,
+              "width": 8,
+              "height": 9,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-5"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 13,
+              "y": 4,
+              "width": 11,
+              "height": 9,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-6"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 13,
+              "width": 24,
+              "height": 6,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-8"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "links": [],
+    "liveNow": false,
+    "preload": false,
+    "tags": [
+      "solana",
+      "dex",
+      "analytics",
+      "market-share"
+    ],
+    "timeSettings": {
+      "timezone": "utc",
+      "from": "now-3d",
+      "to": "now",
+      "autoRefresh": "12h",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "hideTimepicker": false,
+      "fiscalYearStartMonth": 0
+    },
+    "title": "DEX Market Share",
+    "variables": [
+      {
+        "kind": "ConstantVariable",
+        "spec": {
+          "name": "project",
+          "query": "solana-analytics-498121",
+          "current": {
+            "text": "solana-analytics-498121",
+            "value": "solana-analytics-498121"
+          },
+          "label": "Project",
+          "hide": "hideVariable",
+          "skipUrlSync": true
+        }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "dex_name",
+          "current": {
+            "text": "All",
+            "value": [
+              "$__all"
+            ]
+          },
+          "label": "DEX",
+          "hide": "dontHide",
+          "refresh": "onTimeRangeChanged",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana-bigquery-datasource",
+            "version": "v0",
+            "datasource": {
+              "name": "dfoozen4vpaf4e"
+            },
+            "spec": {
+              "editorMode": "code",
+              "format": "table",
+              "location": "europe-west3",
+              "rawQuery": true,
+              "rawSql": "SELECT DISTINCT dex_name FROM `${project}.solana_marts.fct_dex_market_share_daily`"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "alphabeticalAsc",
+          "definition": "SELECT DISTINCT dex_name FROM `${project}.solana_marts.fct_dex_market_share_daily`",
+          "options": [],
+          "multi": true,
+          "includeAll": true,
+          "allowCustomValue": true
+        }
+      }
+    ]
+  }
+}
