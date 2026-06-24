@@ -29,7 +29,7 @@ from src.gcs import (
     read_json_from_gcs,
     write_json_to_gcs,
 )
-from src.logging import configure_logging, get_logger
+from src.logging import bind_context, configure_logging, get_logger
 
 logger = get_logger(__name__)
 
@@ -206,6 +206,7 @@ def run_pipeline(
     snapshot_at, yesterday = get_snapshot_metadata()
     run_date = date.fromisoformat(target_date) if target_date else yesterday
     run_dexes = dexes or POOL_DEXES
+    bind_context(snapshot_date=run_date.isoformat())
     logger.info("pipeline_start", date=run_date.isoformat(), dexes=run_dexes)
 
     rows: dict[str, int] = {}
@@ -231,7 +232,7 @@ def run_pipeline(
 
     logger.info("rows_loaded", **rows)
 
-    # dbt transforms whatever made it into BigQuery
+    # dbt transforms whatever made it into BigQuery (and runs data-quality tests)
     if not skip_dbt:
         run_dbt()
 

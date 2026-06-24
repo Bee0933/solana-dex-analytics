@@ -38,6 +38,7 @@ sources:
             description: "On-chain mint address of the quote token"
           - name: trailing_24h_volume_usd
             description: "Rolling 24-hour trade volume in USD, as reported by the DEX API"
+            tests: [not_null]
           - name: trailing_24h_fees_usd
             description: "Rolling 24-hour fees collected in USD, pre-calculated by the DEX API"
           - name: tvl_usd
