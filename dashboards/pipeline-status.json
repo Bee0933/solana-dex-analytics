@@ -141,7 +141,7 @@
           "refId": "A",
           "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
           "editorMode": "code", "rawQuery": true, "format": "table", "location": "europe-west3",
-          "rawSql": "SELECT table_schema, table_name, total_rows, total_logical_bytes AS bytes\nFROM `${project}.region-europe-west3.INFORMATION_SCHEMA.TABLE_STORAGE`\nWHERE table_schema IN ('solana_raw','solana_marts')\nORDER BY total_logical_bytes DESC"
+          "rawSql": "SELECT 'solana_raw' AS table_schema, table_id AS table_name, row_count AS total_rows, size_bytes AS bytes\nFROM `${project}.solana_raw.__TABLES__`\nUNION ALL\nSELECT 'solana_marts', table_id, row_count, size_bytes\nFROM `${project}.solana_marts.__TABLES__`\nORDER BY bytes DESC"
         }
       ]
     }
