@@ -54,6 +54,7 @@ def get_snapshot_metadata() -> tuple[datetime, date]:
     snapshot_date is the 24h window the API data covers — always the prior day.
     """
     snapshot_at = datetime.now(timezone.utc)
+    
     return snapshot_at, (snapshot_at - timedelta(days=1)).date()
 
 
