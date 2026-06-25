@@ -3,23 +3,10 @@
   "kind": "Dashboard",
   "metadata": {
     "name": "solana-dex-market-share",
-    "namespace": "stacks-973109",
-    "uid": "198a84d2-124d-4cd7-ab61-8a822d1d64da",
-    "resourceVersion": "2069375145021014022",
-    "generation": 10,
+    "generation": 11,
     "creationTimestamp": "2026-06-23T09:27:41Z",
-    "labels": {
-      "grafana.app/deprecatedInternalID": "2199449248944128"
-    },
-    "annotations": {
-      "grafana.app/createdBy": "user:edqj1hk6ylgcge",
-      "grafana.app/folder": "fshzqf",
-      "grafana.app/saved-from-ui": "Grafana Cloud",
-      "grafana.app/updatedBy": "user:edqj1hk6ylgcge",
-      "grafana.app/updatedTimestamp": "2026-06-23T11:00:56Z",
-      "grafana.app/folderTitle": "solana-analytics",
-      "grafana.app/folderUrl": "/dashboards/f/fshzqf/solanaanalytics"
-    }
+    "labels": {},
+    "annotations": {}
   },
   "spec": {
     "annotations": [
@@ -30,10 +17,10 @@
             "kind": "DataQuery",
             "group": "grafana",
             "version": "v0",
-            "datasource": {
-              "name": "-- Grafana --"
-            },
-            "spec": {}
+            "spec": {},
+            "labels": {
+              "grafana.app/export-label": "grafana-1"
+            }
           },
           "enable": true,
           "hide": true,
@@ -64,15 +51,16 @@
                       "kind": "DataQuery",
                       "group": "grafana-bigquery-datasource",
                       "version": "v0",
-                      "datasource": {
-                        "name": "dfoozen4vpaf4e"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "format": "table",
                         "location": "europe-west3",
                         "rawQuery": true,
                         "rawSql": "SELECT SUM(trailing_24h_volume_usd) AS total_24h_volume\nFROM `${project}.solana_marts.fct_dex_market_share_daily`\nWHERE snapshot_date = (SELECT MAX(snapshot_date) FROM `${project}.solana_marts.fct_dex_market_share_daily`)\n  AND dex_name IN (${dex_name:singlequote})"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-bigquery-datasource-1",
+                        "grafana.app/export-datasource-name": "grafana-bigquery-datasource"
                       }
                     },
                     "refId": "A",
@@ -146,15 +134,16 @@
                       "kind": "DataQuery",
                       "group": "grafana-bigquery-datasource",
                       "version": "v0",
-                      "datasource": {
-                        "name": "dfoozen4vpaf4e"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "format": "table",
                         "location": "europe-west3",
                         "rawQuery": true,
                         "rawSql": "SELECT SUM(trailing_7d_volume_usd) AS total_7d_volume\nFROM `${project}.solana_marts.fct_dex_market_share_daily`\nWHERE snapshot_date = (SELECT MAX(snapshot_date) FROM `${project}.solana_marts.fct_dex_market_share_daily`)\n  AND dex_name IN (${dex_name:singlequote})"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-bigquery-datasource-1",
+                        "grafana.app/export-datasource-name": "grafana-bigquery-datasource"
                       }
                     },
                     "refId": "A",
@@ -228,15 +217,16 @@
                       "kind": "DataQuery",
                       "group": "grafana-bigquery-datasource",
                       "version": "v0",
-                      "datasource": {
-                        "name": "dfoozen4vpaf4e"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "format": "table",
                         "location": "europe-west3",
                         "rawQuery": true,
                         "rawSql": "SELECT dex_name, dex_market_share_pct AS leading_share_pct\nFROM `${project}.solana_marts.fct_dex_market_share_daily`\nWHERE snapshot_date = (SELECT MAX(snapshot_date) FROM `${project}.solana_marts.fct_dex_market_share_daily`)\n  AND dex_name IN (${dex_name:singlequote})\nORDER BY dex_market_share_pct DESC\nLIMIT 1"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-bigquery-datasource-1",
+                        "grafana.app/export-datasource-name": "grafana-bigquery-datasource"
                       }
                     },
                     "refId": "A",
@@ -312,15 +302,16 @@
                       "kind": "DataQuery",
                       "group": "grafana-bigquery-datasource",
                       "version": "v0",
-                      "datasource": {
-                        "name": "dfoozen4vpaf4e"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "format": "table",
                         "location": "europe-west3",
                         "rawQuery": true,
                         "rawSql": "WITH daily AS (\n  SELECT snapshot_date, SUM(trailing_24h_volume_usd) AS v\n  FROM `${project}.solana_marts.fct_dex_market_share_daily`\n  WHERE dex_name IN (${dex_name:singlequote})\n  GROUP BY snapshot_date\n),\nlatest AS (SELECT * FROM daily ORDER BY snapshot_date DESC LIMIT 1)\nSELECT SAFE_DIVIDE(l.v - p.v, p.v) * 100 AS wow_pct\nFROM latest l\nJOIN daily p ON p.snapshot_date = DATE_SUB(l.snapshot_date, INTERVAL 7 DAY)"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-bigquery-datasource-1",
+                        "grafana.app/export-datasource-name": "grafana-bigquery-datasource"
                       }
                     },
                     "refId": "A",
@@ -400,15 +391,16 @@
                       "kind": "DataQuery",
                       "group": "grafana-bigquery-datasource",
                       "version": "v0",
-                      "datasource": {
-                        "name": "dfoozen4vpaf4e"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "format": "table",
                         "location": "europe-west3",
                         "rawQuery": true,
                         "rawSql": "SELECT snapshot_date AS time, dex_name, trailing_24h_volume_usd\nFROM `${project}.solana_marts.fct_dex_market_share_daily`\nWHERE $__timeFilter(TIMESTAMP(snapshot_date))\n  AND dex_name IN (${dex_name:singlequote})\nORDER BY snapshot_date"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-bigquery-datasource-1",
+                        "grafana.app/export-datasource-name": "grafana-bigquery-datasource"
                       }
                     },
                     "refId": "A",
@@ -534,15 +526,16 @@
                       "kind": "DataQuery",
                       "group": "grafana-bigquery-datasource",
                       "version": "v0",
-                      "datasource": {
-                        "name": "dfoozen4vpaf4e"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "format": "table",
                         "location": "europe-west3",
                         "rawQuery": true,
                         "rawSql": "SELECT snapshot_date AS time, dex_name, dex_market_share_pct\nFROM `${project}.solana_marts.fct_dex_market_share_daily`\nWHERE $__timeFilter(TIMESTAMP(snapshot_date))\n  AND dex_name IN (${dex_name:singlequote})\nORDER BY snapshot_date"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-bigquery-datasource-1",
+                        "grafana.app/export-datasource-name": "grafana-bigquery-datasource"
                       }
                     },
                     "refId": "A",
@@ -669,15 +662,16 @@
                       "kind": "DataQuery",
                       "group": "grafana-bigquery-datasource",
                       "version": "v0",
-                      "datasource": {
-                        "name": "dfoozen4vpaf4e"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "format": "table",
                         "location": "europe-west3",
                         "rawQuery": true,
                         "rawSql": "WITH latest AS (\n  SELECT dex_name, snapshot_date, trailing_24h_volume_usd,\n         ROW_NUMBER() OVER (PARTITION BY dex_name ORDER BY snapshot_date DESC) rn\n  FROM `${project}.solana_marts.fct_dex_market_share_daily`\n),\nwk_ago AS (\n  SELECT f.dex_name, f.trailing_24h_volume_usd AS vol_7d_ago\n  FROM `${project}.solana_marts.fct_dex_market_share_daily` f\n  JOIN latest l ON f.dex_name = l.dex_name AND f.snapshot_date = DATE_SUB(l.snapshot_date, INTERVAL 7 DAY)\n  WHERE l.rn = 1\n)\nSELECT l.dex_name,\n       l.trailing_24h_volume_usd AS `24h Volume`,\n       SAFE_DIVIDE(l.trailing_24h_volume_usd - w.vol_7d_ago, w.vol_7d_ago) * 100 AS `7d Change`\nFROM latest l\nLEFT JOIN wk_ago w USING (dex_name)\nWHERE l.rn = 1"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-bigquery-datasource-1",
+                        "grafana.app/export-datasource-name": "grafana-bigquery-datasource"
                       }
                     },
                     "refId": "A",
@@ -781,15 +775,16 @@
                       "kind": "DataQuery",
                       "group": "grafana-bigquery-datasource",
                       "version": "v0",
-                      "datasource": {
-                        "name": "dfoozen4vpaf4e"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "format": "table",
                         "location": "europe-west3",
                         "rawQuery": true,
                         "rawSql": "WITH latest AS (\n  SELECT dex_name, dex_market_share_pct, share_7d_avg, share_change_vs_7d_avg_pct,\n         ROW_NUMBER() OVER (PARTITION BY dex_name ORDER BY snapshot_date DESC) rn\n  FROM `${project}.solana_marts.fct_dex_market_share_daily`\n)\nSELECT dex_name,\n       dex_market_share_pct AS current_share_pct,\n       share_7d_avg         AS avg_7d_share_pct,\n       share_change_vs_7d_avg_pct\nFROM latest\nWHERE rn = 1\nORDER BY share_change_vs_7d_avg_pct DESC"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "grafana-bigquery-datasource-1",
+                        "grafana.app/export-datasource-name": "grafana-bigquery-datasource"
                       }
                     },
                     "refId": "A",
@@ -832,7 +827,7 @@
                     ]
                   },
                   "custom": {
-                    "align": "auto",
+                    "align": "center",
                     "cellOptions": {
                       "type": "auto"
                     },
@@ -1103,10 +1098,8 @@
         "spec": {
           "name": "dex_name",
           "current": {
-            "text": "All",
-            "value": [
-              "$__all"
-            ]
+            "text": "",
+            "value": ""
           },
           "label": "DEX",
           "hide": "dontHide",
@@ -1116,15 +1109,16 @@
             "kind": "DataQuery",
             "group": "grafana-bigquery-datasource",
             "version": "v0",
-            "datasource": {
-              "name": "dfoozen4vpaf4e"
-            },
             "spec": {
               "editorMode": "code",
               "format": "table",
               "location": "europe-west3",
               "rawQuery": true,
               "rawSql": "SELECT DISTINCT dex_name FROM `${project}.solana_marts.fct_dex_market_share_daily`"
+            },
+            "labels": {
+              "grafana.app/export-label": "grafana-bigquery-datasource-1",
+              "grafana.app/export-datasource-name": "grafana-bigquery-datasource"
             }
           },
           "regex": "",
