@@ -30,7 +30,7 @@ gs://solana-dex-raw/raw/dex_pools/dex={raydium|orca|meteora}/date=YYYY-MM-DD/
 gs://solana-dex-raw/raw/dex_market_share/date=YYYY-MM-DD/
 ```
 
-The Python entrypoint (`src/pipeline.py`) runs the phases in order itself, so there's no separate orchestrator like Airflow or Prefect. Loads are idempotent: run the same day twice and it skips objects already in GCS and snapshots already in BigQuery, or with `--overwrite` it wipes that day's slice and reloads it cleanly. Each source stands on its own, so if one API is down the others still load and dbt still runs; the job then exits with an error code so you hear about it. dbt does every transform inside BigQuery and tests each model before it finishes.
+Loads are idempotent: run the same day twice and it skips objects already in GCS and snapshots already in BigQuery, or with `--overwrite` it wipes that day's slice and reloads it cleanly. Each source stands on its own, so if one API is down the others still load and dbt still runs; the job then exits with an error code so you hear about it. dbt does every transform inside BigQuery and tests each model before it finishes.
 
 ---
 
@@ -84,7 +84,6 @@ Protocol teams want to track their competitive position over time: who is winnin
 
 <img src="static/dex-market-share-dashboard.png" width="850" alt="DEX Market Share dashboard" />
 
-> Smart money and wallet level tracking is out of v1 scope, since the free APIs don't expose wallet level swap data.
 
 ---
 
@@ -114,7 +113,7 @@ The three DEX APIs each return a different JSON shape, so ingestion normalizes t
 | Ingestion | Python 3.10 with httpx (tenacity retries), writes raw JSON to GCS |
 | Raw load | BigQuery, idempotent load per snapshot (append, and delete the slice on overwrite) |
 | Transform | dbt (staging, intermediate, marts) |
-| Compute | Cloud Run Job (one image, runs `python -m src.pipeline`) |
+| Compute | Cloud Run Job |
 | Scheduling | Cloud Scheduler (02:00 pipeline, 04:00 freshness) |
 | Serving | Grafana, reading from `marts` through a service account that can only read |
 | Monitoring | Cloud Logging metric and alert policy to email, plus a freshness safety net |
@@ -203,8 +202,6 @@ Go to **Dashboards → New → Import** and upload the JSON:
 | `dashboards/lp-visibility.json` | LP Visibility | top pools by fees, fee rate comparison, capital efficiency leaderboard, pool trajectory |
 | `dashboards/market-share.json` | DEX Market Share | daily volume, share % over time, current volume per DEX, share change table |
 | `dashboards/pipeline-status.json` | Pipeline Status | freshness indicator, last snapshot and rows per table, rows today vs 7 day average, storage |
-
-`pipeline-status.json` is portable, so on import it asks you to pick the BigQuery datasource. The two analytics boards reference the datasource by UID, so edit the UID if you import into a fresh Grafana. Each board has a DEX filter and the global time range picker; set the range to 7 days or more so the time series panels show data.
 
 ### Pipeline Status (observability)
 
