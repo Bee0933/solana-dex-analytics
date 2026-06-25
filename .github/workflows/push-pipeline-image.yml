@@ -48,9 +48,14 @@ jobs:
           docker push $IMAGE:${{ github.sha }}
           docker push $IMAGE:latest
 
-      # point the Cloud Run Job at the new image
-      - name: Deploy to Cloud Run Job
+      # point both Cloud Run Jobs (pipeline + freshness) at the new image.
+      # the freshness job is created by Terraform; the "|| true" tolerates the very
+      # first deploy where it may not exist yet (a re-run then syncs it).
+      - name: Deploy to Cloud Run Jobs
         run: |
           gcloud run jobs update $JOB \
             --image $IMAGE:${{ github.sha }} \
             --region $REGION
+          gcloud run jobs update solana-freshness \
+            --image $IMAGE:${{ github.sha }} \
+            --region $REGION || echo "solana-freshness not created yet — re-run after terraform applies"
