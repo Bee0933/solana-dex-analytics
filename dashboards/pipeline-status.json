@@ -1,553 +1,170 @@
 {
-  "annotations": [
+  "__inputs": [
     {
-      "kind": "AnnotationQuery",
-      "spec": {
-        "builtIn": true,
-        "enable": true,
-        "hide": true,
-        "iconColor": "rgba(0, 211, 255, 1)",
-        "name": "Annotations & Alerts",
-        "query": {
-          "datasource": {
-            "name": "-- Grafana --"
-          },
-          "group": "grafana",
-          "kind": "DataQuery",
-          "spec": {},
-          "version": "v0"
-        }
-      }
+      "name": "DS_BIGQUERY",
+      "label": "BigQuery",
+      "description": "Google BigQuery data source for Solana analytics",
+      "type": "datasource",
+      "pluginId": "grafana-bigquery-datasource",
+      "pluginName": "Google BigQuery"
     }
   ],
-  "cursorSync": "Crosshair",
+  "__requires": [
+    { "type": "grafana", "id": "grafana", "name": "Grafana", "version": "11.0.0" },
+    { "type": "datasource", "id": "grafana-bigquery-datasource", "name": "Google BigQuery", "version": "2.0.0" },
+    { "type": "panel", "id": "stat", "name": "Stat", "version": "" },
+    { "type": "panel", "id": "table", "name": "Table", "version": "" }
+  ],
+  "annotations": { "list": [] },
   "editable": true,
-  "elements": {
-    "panel-1": {
-      "kind": "Panel",
-      "spec": {
-        "data": {
-          "kind": "QueryGroup",
-          "spec": {
-            "queries": [
-              {
-                "kind": "PanelQuery",
-                "spec": {
-                  "hidden": false,
-                  "query": {
-                    "datasource": {
-                      "name": "dfoozen4vpaf4e"
-                    },
-                    "group": "grafana-bigquery-datasource",
-                    "kind": "DataQuery",
-                    "spec": {
-                      "editorMode": "code",
-                      "format": "table",
-                      "location": "europe-west3",
-                      "rawQuery": true,
-                      "rawSql": "SELECT TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), MAX(snapshot_at), HOUR) AS hours_since_last_snapshot\nFROM `${project}.solana_raw.raw_dex_pools`"
-                    },
-                    "version": "v0"
-                  },
-                  "refId": "A"
-                }
-              }
-            ],
-            "queryOptions": {},
-            "transformations": []
-          }
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Freshness — Hours Since Last Snapshot",
+      "description": "Hours since the most recent pool snapshot. Green < 26h, yellow < 48h, red after.",
+      "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
+      "gridPos": { "h": 4, "w": 8, "x": 0, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "h",
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "green", "value": null },
+            { "color": "yellow", "value": 26 },
+            { "color": "red", "value": 48 }
+          ] }
         },
-        "description": "Hours since the most recent pool snapshot. Green < 26h, yellow < 48h, red after.",
-        "id": 1,
-        "links": [],
-        "title": "Freshness — Hours Since Last Snapshot",
-        "vizConfig": {
-          "group": "stat",
-          "kind": "VizConfig",
-          "spec": {
-            "fieldConfig": {
-              "defaults": {
-                "color": {
-                  "mode": "thresholds"
-                },
-                "thresholds": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green",
-                      "value": 0
-                    },
-                    {
-                      "color": "yellow",
-                      "value": 26
-                    },
-                    {
-                      "color": "red",
-                      "value": 48
-                    }
-                  ]
-                },
-                "unit": "h"
-              },
-              "overrides": []
-            },
-            "options": {
-              "colorMode": "background",
-              "graphMode": "none",
-              "justifyMode": "auto",
-              "orientation": "auto",
-              "reduceOptions": {
-                "calcs": [
-                  "last"
-                ],
-                "fields": "",
-                "values": false
-              },
-              "textMode": "value",
-              "wideLayout": true
-            }
-          },
-          "version": "13.1.0-27822252871"
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["last"], "fields": "", "values": false },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
+          "editorMode": "code", "rawQuery": true, "format": "table", "location": "europe-west3",
+          "rawSql": "SELECT TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), MAX(snapshot_at), HOUR) AS hours_since_last_snapshot\nFROM `${project}.solana_raw.raw_dex_pools`"
         }
-      }
+      ]
     },
-    "panel-2": {
-      "kind": "Panel",
-      "spec": {
-        "data": {
-          "kind": "QueryGroup",
-          "spec": {
-            "queries": [
-              {
-                "kind": "PanelQuery",
-                "spec": {
-                  "hidden": false,
-                  "query": {
-                    "datasource": {
-                      "name": "dfoozen4vpaf4e"
-                    },
-                    "group": "grafana-bigquery-datasource",
-                    "kind": "DataQuery",
-                    "spec": {
-                      "editorMode": "code",
-                      "format": "table",
-                      "location": "europe-west3",
-                      "rawQuery": true,
-                      "rawSql": "SELECT 'raw_dex_pools' AS tbl, MAX(snapshot_date) AS last_snapshot, COUNT(*) AS rows_total FROM `${project}.solana_raw.raw_dex_pools`\nUNION ALL SELECT 'raw_dex_market_share', MAX(snapshot_date), COUNT(*) FROM `${project}.solana_raw.raw_dex_market_share`\nUNION ALL SELECT 'fct_pool_trailing_24h', MAX(snapshot_date), COUNT(*) FROM `${project}.solana_marts.fct_pool_trailing_24h`\nUNION ALL SELECT 'fct_dex_market_share_daily', MAX(snapshot_date), COUNT(*) FROM `${project}.solana_marts.fct_dex_market_share_daily`\nORDER BY tbl"
-                    },
-                    "version": "v0"
-                  },
-                  "refId": "A"
-                }
-              }
-            ],
-            "queryOptions": {},
-            "transformations": []
-          }
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Pool Rows — Today vs 7-Day Avg",
+      "description": "Pool rows loaded for the latest snapshot vs the 7-day average.",
+      "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
+      "gridPos": { "h": 4, "w": 16, "x": 8, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] }
         },
-        "description": "Latest snapshot date and total row count per table.",
-        "id": 2,
-        "links": [],
-        "title": "Tables — Last Snapshot & Rows",
-        "vizConfig": {
-          "group": "table",
-          "kind": "VizConfig",
-          "spec": {
-            "fieldConfig": {
-              "defaults": {
-                "custom": {
-                  "align": "auto",
-                  "cellOptions": {
-                    "type": "auto"
-                  },
-                  "filterable": true,
-                  "inspect": false
-                }
-              },
-              "overrides": [
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "tbl"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "Table"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "last_snapshot"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "Last Snapshot"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "rows_total"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "Rows"
-                    },
-                    {
-                      "id": "unit",
-                      "value": "short"
-                    }
-                  ]
-                }
-              ]
-            },
-            "options": {
-              "cellHeight": "sm",
-              "showHeader": true
-            }
-          },
-          "version": "13.1.0-27822252871"
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "rows_today" }, "properties": [{ "id": "displayName", "value": "Rows Today" }] },
+          { "matcher": { "id": "byName", "options": "rows_7d_avg" }, "properties": [{ "id": "displayName", "value": "Rows 7d Avg" }] }
+        ]
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["last"], "fields": "", "values": true },
+        "textMode": "value_and_name"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
+          "editorMode": "code", "rawQuery": true, "format": "table", "location": "europe-west3",
+          "rawSql": "WITH daily AS (\n  SELECT snapshot_date, COUNT(*) AS c\n  FROM `${project}.solana_raw.raw_dex_pools`\n  GROUP BY snapshot_date\n)\nSELECT\n  (SELECT c FROM daily ORDER BY snapshot_date DESC LIMIT 1) AS rows_today,\n  (SELECT ROUND(AVG(c)) FROM (SELECT c FROM daily ORDER BY snapshot_date DESC LIMIT 7)) AS rows_7d_avg"
         }
-      }
+      ]
     },
-    "panel-3": {
-      "kind": "Panel",
-      "spec": {
-        "data": {
-          "kind": "QueryGroup",
-          "spec": {
-            "queries": [
-              {
-                "kind": "PanelQuery",
-                "spec": {
-                  "hidden": false,
-                  "query": {
-                    "datasource": {
-                      "name": "dfoozen4vpaf4e"
-                    },
-                    "group": "grafana-bigquery-datasource",
-                    "kind": "DataQuery",
-                    "spec": {
-                      "editorMode": "code",
-                      "format": "table",
-                      "location": "europe-west3",
-                      "rawQuery": true,
-                      "rawSql": "WITH daily AS (\n  SELECT snapshot_date, COUNT(*) AS c\n  FROM `${project}.solana_raw.raw_dex_pools`\n  GROUP BY snapshot_date\n)\nSELECT\n  (SELECT c FROM daily ORDER BY snapshot_date DESC LIMIT 1) AS rows_today,\n  (SELECT ROUND(AVG(c)) FROM (SELECT c FROM daily ORDER BY snapshot_date DESC LIMIT 7)) AS rows_7d_avg"
-                    },
-                    "version": "v0"
-                  },
-                  "refId": "A"
-                }
-              }
-            ],
-            "queryOptions": {},
-            "transformations": []
-          }
-        },
-        "description": "Pool rows loaded for the latest snapshot vs the 7-day average.",
-        "id": 3,
-        "links": [],
-        "title": "Pool Rows — Today vs 7-Day Avg",
-        "vizConfig": {
-          "group": "stat",
-          "kind": "VizConfig",
-          "spec": {
-            "fieldConfig": {
-              "defaults": {
-                "color": {
-                  "mode": "thresholds"
-                },
-                "thresholds": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "blue",
-                      "value": 0
-                    }
-                  ]
-                },
-                "unit": "short"
-              },
-              "overrides": [
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "rows_today"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "Rows Today"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "rows_7d_avg"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "Rows 7d Avg"
-                    }
-                  ]
-                }
-              ]
-            },
-            "options": {
-              "colorMode": "value",
-              "graphMode": "none",
-              "justifyMode": "auto",
-              "orientation": "auto",
-              "reduceOptions": {
-                "calcs": [
-                  "last"
-                ],
-                "fields": "",
-                "values": true
-              },
-              "textMode": "value_and_name",
-              "wideLayout": true
-            }
-          },
-          "version": "13.1.0-27822252871"
+    {
+      "id": 2,
+      "type": "table",
+      "title": "Tables — Last Snapshot & Rows",
+      "description": "Latest snapshot date and total row count per table.",
+      "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "fieldConfig": {
+        "defaults": { "custom": { "align": "auto", "cellOptions": { "type": "auto" }, "filterable": true } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "tbl" }, "properties": [{ "id": "displayName", "value": "Table" }] },
+          { "matcher": { "id": "byName", "options": "last_snapshot" }, "properties": [{ "id": "displayName", "value": "Last Snapshot" }] },
+          { "matcher": { "id": "byName", "options": "rows_total" }, "properties": [{ "id": "displayName", "value": "Rows" }, { "id": "unit", "value": "short" }] }
+        ]
+      },
+      "options": { "showHeader": true, "cellHeight": "sm" },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
+          "editorMode": "code", "rawQuery": true, "format": "table", "location": "europe-west3",
+          "rawSql": "SELECT 'raw_dex_pools' AS tbl, MAX(snapshot_date) AS last_snapshot, COUNT(*) AS rows_total FROM `${project}.solana_raw.raw_dex_pools`\nUNION ALL SELECT 'raw_dex_market_share', MAX(snapshot_date), COUNT(*) FROM `${project}.solana_raw.raw_dex_market_share`\nUNION ALL SELECT 'fct_pool_trailing_24h', MAX(snapshot_date), COUNT(*) FROM `${project}.solana_marts.fct_pool_trailing_24h`\nUNION ALL SELECT 'fct_dex_market_share_daily', MAX(snapshot_date), COUNT(*) FROM `${project}.solana_marts.fct_dex_market_share_daily`\nORDER BY tbl"
         }
-      }
+      ]
     },
-    "panel-4": {
-      "kind": "Panel",
-      "spec": {
-        "data": {
-          "kind": "QueryGroup",
-          "spec": {
-            "queries": [
-              {
-                "kind": "PanelQuery",
-                "spec": {
-                  "hidden": false,
-                  "query": {
-                    "datasource": {
-                      "name": "dfoozen4vpaf4e"
-                    },
-                    "group": "grafana-bigquery-datasource",
-                    "kind": "DataQuery",
-                    "spec": {
-                      "editorMode": "code",
-                      "format": "table",
-                      "location": "europe-west3",
-                      "rawQuery": true,
-                      "rawSql": "SELECT table_schema, table_name, total_rows, total_logical_bytes AS bytes\nFROM `${project}.region-europe-west3.INFORMATION_SCHEMA.TABLE_STORAGE`\nWHERE table_schema IN ('solana_raw','solana_marts')\nORDER BY total_logical_bytes DESC"
-                    },
-                    "version": "v0"
-                  },
-                  "refId": "A"
-                }
-              }
-            ],
-            "queryOptions": {},
-            "transformations": []
-          }
-        },
-        "description": "Storage footprint per table (from INFORMATION_SCHEMA.TABLE_STORAGE).",
-        "id": 4,
-        "links": [],
-        "title": "Storage by Table",
-        "vizConfig": {
-          "group": "table",
-          "kind": "VizConfig",
-          "spec": {
-            "fieldConfig": {
-              "defaults": {
-                "custom": {
-                  "align": "auto",
-                  "cellOptions": {
-                    "type": "auto"
-                  },
-                  "filterable": true,
-                  "inspect": false
-                }
-              },
-              "overrides": [
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "table_schema"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "Dataset"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "table_name"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "Table"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "total_rows"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "Rows"
-                    },
-                    {
-                      "id": "unit",
-                      "value": "short"
-                    }
-                  ]
-                },
-                {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "bytes"
-                  },
-                  "properties": [
-                    {
-                      "id": "displayName",
-                      "value": "Size"
-                    },
-                    {
-                      "id": "unit",
-                      "value": "bytes"
-                    }
-                  ]
-                }
-              ]
-            },
-            "options": {
-              "cellHeight": "sm",
-              "showHeader": true,
-              "sortBy": [
-                {
-                  "desc": true,
-                  "displayName": "Size"
-                }
-              ]
-            }
-          },
-          "version": "13.1.0-27822252871"
-        }
-      }
-    }
-  },
-  "layout": {
-    "kind": "GridLayout",
-    "spec": {
-      "items": [
+    {
+      "id": 4,
+      "type": "table",
+      "title": "Storage by Table",
+      "description": "Storage footprint per table (from INFORMATION_SCHEMA.TABLE_STORAGE).",
+      "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "fieldConfig": {
+        "defaults": { "custom": { "align": "auto", "cellOptions": { "type": "auto" }, "filterable": true } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "table_schema" }, "properties": [{ "id": "displayName", "value": "Dataset" }] },
+          { "matcher": { "id": "byName", "options": "table_name" }, "properties": [{ "id": "displayName", "value": "Table" }] },
+          { "matcher": { "id": "byName", "options": "total_rows" }, "properties": [{ "id": "displayName", "value": "Rows" }, { "id": "unit", "value": "short" }] },
+          { "matcher": { "id": "byName", "options": "bytes" }, "properties": [{ "id": "displayName", "value": "Size" }, { "id": "unit", "value": "bytes" }] }
+        ]
+      },
+      "options": { "showHeader": true, "cellHeight": "sm", "sortBy": [{ "displayName": "Size", "desc": true }] },
+      "targets": [
         {
-          "kind": "GridLayoutItem",
-          "spec": {
-            "element": {
-              "kind": "ElementReference",
-              "name": "panel-1"
-            },
-            "height": 4,
-            "width": 8,
-            "x": 0,
-            "y": 0
-          }
-        },
-        {
-          "kind": "GridLayoutItem",
-          "spec": {
-            "element": {
-              "kind": "ElementReference",
-              "name": "panel-3"
-            },
-            "height": 4,
-            "width": 16,
-            "x": 8,
-            "y": 0
-          }
-        },
-        {
-          "kind": "GridLayoutItem",
-          "spec": {
-            "element": {
-              "kind": "ElementReference",
-              "name": "panel-2"
-            },
-            "height": 8,
-            "width": 12,
-            "x": 0,
-            "y": 4
-          }
-        },
-        {
-          "kind": "GridLayoutItem",
-          "spec": {
-            "element": {
-              "kind": "ElementReference",
-              "name": "panel-4"
-            },
-            "height": 8,
-            "width": 12,
-            "x": 12,
-            "y": 4
-          }
+          "refId": "A",
+          "datasource": { "type": "grafana-bigquery-datasource", "uid": "${DS_BIGQUERY}" },
+          "editorMode": "code", "rawQuery": true, "format": "table", "location": "europe-west3",
+          "rawSql": "SELECT table_schema, table_name, total_rows, total_logical_bytes AS bytes\nFROM `${project}.region-europe-west3.INFORMATION_SCHEMA.TABLE_STORAGE`\nWHERE table_schema IN ('solana_raw','solana_marts')\nORDER BY total_logical_bytes DESC"
         }
       ]
     }
-  },
-  "links": [],
-  "liveNow": false,
-  "preload": false,
-  "tags": [
-    "solana",
-    "dex",
-    "analytics",
-    "status"
   ],
-  "timeSettings": {
-    "autoRefresh": "1h",
-    "autoRefreshIntervals": [
-      "30s",
-      "1m",
-      "5m",
-      "15m",
-      "30m",
-      "1h"
-    ],
-    "fiscalYearStartMonth": 0,
-    "from": "now-7d",
-    "hideTimepicker": false,
-    "timezone": "utc",
-    "to": "now"
-  },
-  "title": "Pipeline Status",
-  "variables": [
-    {
-      "kind": "ConstantVariable",
-      "spec": {
-        "current": {
-          "text": "solana-analytics-498121",
-          "value": "solana-analytics-498121"
-        },
-        "hide": "hideVariable",
-        "label": "Project",
+  "refresh": "1h",
+  "schemaVersion": 39,
+  "tags": ["solana", "dex", "analytics", "status"],
+  "templating": {
+    "list": [
+      {
         "name": "project",
+        "type": "constant",
+        "label": "Project",
+        "hide": 2,
         "query": "solana-analytics-498121",
-        "skipUrlSync": true
+        "current": { "text": "solana-analytics-498121", "value": "solana-analytics-498121" }
       }
-    }
-  ]
+    ]
+  },
+  "time": { "from": "now-7d", "to": "now" },
+  "timezone": "utc",
+  "title": "Pipeline Status",
+  "uid": "solana-pipeline-status",
+  "version": 1,
+  "weekStart": ""
 }

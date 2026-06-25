@@ -7,12 +7,13 @@ resource "google_service_account" "grafana_bigquery_reader" {
   project      = var.project_id
 }
 
-# read access to the marts dataset only — dashboards query solana_marts
-resource "google_bigquery_dataset_iam_member" "grafana_marts_viewer" {
-  project    = var.project_id
-  dataset_id = google_bigquery_dataset.datasets["solana_marts"].dataset_id
-  role       = "roles/bigquery.dataViewer"
-  member     = "serviceAccount:${google_service_account.grafana_bigquery_reader.email}"
+# project-level read access — the analytics dashboards read solana_marts, and the
+# pipeline-status board also reads the raw landing tables + INFORMATION_SCHEMA.
+# Read-only, so project-wide dataViewer is acceptable for this dashboard SA.
+resource "google_project_iam_member" "grafana_data_viewer" {
+  project = var.project_id
+  role    = "roles/bigquery.dataViewer"
+  member  = "serviceAccount:${google_service_account.grafana_bigquery_reader.email}"
 }
 
 # run query jobs (must be project-level; there is no dataset-scoped jobUser)
