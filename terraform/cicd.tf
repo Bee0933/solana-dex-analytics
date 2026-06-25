@@ -1,6 +1,6 @@
 # Service account used by the Terraform CI workflow to apply infra changes.
 # It needs broad rights (it manages everything), so it's separate from the
-# least-privilege runtime pipeline SA.
+# least-privilege runtime pipeline SA..
 resource "google_service_account" "terraform" {
   account_id   = "terraform-deployer-sa"
   display_name = "Terraform Deployer (CI)"

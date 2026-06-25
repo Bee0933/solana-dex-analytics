@@ -1,7 +1,7 @@
 """Data sources: one fetch() + parse() pair per DEX, plus a shared HTTP helper.
 
 fetch_* functions pull raw JSON from each API (with retries on transient errors).
-parse_* functions map that raw JSON onto our unified BigQuery schemas.
+parse_* functions map that raw JSON onto our unified BigQuery schemas..
 """
 
 import time
