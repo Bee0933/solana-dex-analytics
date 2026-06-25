@@ -1,4 +1,4 @@
-.PHONY: install lint format run image run-image build
+.PHONY: install lint format run image run-image
 
 install:
 	uv sync
@@ -22,6 +22,3 @@ run-image: image
 		-e GOOGLE_APPLICATION_CREDENTIALS=/tmp/adc.json \
 		-v "$$HOME/.config/gcloud/application_default_credentials.json":/tmp/adc.json:ro \
 		solana-pipeline:local $(ARGS)
-
-build:
-	bash scripts/publish_image.sh

@@ -51,7 +51,7 @@ resource "google_cloud_run_v2_job" "pipeline" {
 
   depends_on = [google_project_service.services]
 
-  # CI updates the image to a per-commit tag on each deploy; don't let Terraform revert it
+  # CI updates the image to a per-commit tag on each deploy; don't let Terraform revert it.
   lifecycle {
     ignore_changes = [template[0].template[0].containers[0].image]
   }
