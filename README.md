@@ -180,6 +180,16 @@ Data quality tests run on every `dbt build`: `not_null` and `accepted_values` on
 
 Three Grafana dashboards live as JSON in `dashboards/`. Grafana only ever reads from the `solana_marts` schema (and the raw tables for the status board), through a service account that can only read.
 
+### Live snapshots
+
+Read only, public Grafana snapshots (no login needed):
+
+- **[LP Visibility](https://bestnyah7.grafana.net/dashboard/snapshot/jPedmmtzoszl5dJBh8zFk6mSHNyUmmj9)**
+- **[DEX Market Share](https://bestnyah7.grafana.net/dashboard/snapshot/nLQXskb0lPicNSrz89M7rYNW9VrD5Clj)**
+- **[Pipeline Status](https://bestnyah7.grafana.net/dashboard/snapshot/fknev0mXS7HkTIljptUKdvmGULGG86Ni)**
+
+> Create each in Grafana with **Share → Snapshot → Publish to snapshots.raintank.io** (or your Grafana Cloud snapshot URL), then paste the link above.
+
 ### One time Grafana setup
 
 ```bash
