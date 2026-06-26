@@ -377,7 +377,7 @@
                         "format": "table",
                         "location": "europe-west3",
                         "rawQuery": true,
-                        "rawSql": "SELECT 'solana_raw' AS table_schema, table_id AS table_name, row_count AS total_rows, size_bytes AS bytes\nFROM `${project}.solana_raw.__TABLES__`\nUNION ALL\nSELECT 'solana_marts', table_id, row_count, size_bytes\nFROM `${project}.solana_marts.__TABLES__`\nORDER BY bytes DESC"
+                        "rawSql": "SELECT 'solana_raw' AS table_schema, table_id AS table_name, CASE type WHEN 1 THEN 'TABLE' WHEN 2 THEN 'VIEW' ELSE 'OTHER' END AS table_type, row_count AS total_rows, size_bytes AS bytes\nFROM `${project}.solana_raw.__TABLES__`\nUNION ALL\nSELECT 'solana_marts', table_id, CASE type WHEN 1 THEN 'TABLE' WHEN 2 THEN 'VIEW' ELSE 'OTHER' END, row_count, size_bytes\nFROM `${project}.solana_marts.__TABLES__`\nORDER BY bytes DESC"
                       },
                       "labels": {
                         "grafana.app/export-label": "grafana-bigquery-datasource-1",
@@ -457,6 +457,18 @@
                       {
                         "id": "displayName",
                         "value": "Table"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "table_type"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": "Type"
                       }
                     ]
                   },
