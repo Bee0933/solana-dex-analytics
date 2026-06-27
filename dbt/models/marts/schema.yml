@@ -17,7 +17,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: [raydium, orca, meteora]
+              arguments:
+                values: [raydium, orca, meteora]
       - name: pool_address
         tests: [not_null]
       - name: trailing_24h_volume_usd

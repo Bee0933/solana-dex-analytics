@@ -17,7 +17,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: [raydium, orca, meteora]
+              arguments:
+                values: [raydium, orca, meteora]
       - name: pool_address
         description: "On-chain pool address — the pool's unique identifier"
         tests: [not_null]
@@ -40,7 +41,8 @@ models:
         description: "Full GCS URI of the raw JSON file this row was loaded from"
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns: [snapshot_date, dex_name, pool_address]
+          arguments:
+            combination_of_columns: [snapshot_date, dex_name, pool_address]
 
   - name: stg_dex_market_share
     description: >
@@ -66,4 +68,5 @@ models:
         description: "Full GCS URI of the raw JSON file this row was loaded from"
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns: [snapshot_date, dex_name]
+          arguments:
+            combination_of_columns: [snapshot_date, dex_name]

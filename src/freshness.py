@@ -45,8 +45,10 @@ def run_freshness() -> None:
 
     result = _run_dbt(["source", "freshness"], env)
     # dbt exits non-zero on ERROR (stale past error_after); a WARN still exits 0,
-    # so we also scan the output for it.
-    warned = "WARN" in result.stdout
+    # so we also scan for the freshness WARN status marker ("[WARN in 0.5s]").
+    # Match that specific token, not a bare "WARN", so dbt's "[WARNING]" deprecation
+    # noise doesn't trip a false alarm.
+    warned = "[WARN in" in result.stdout
     if result.returncode != 0 or warned:
         tail = "\n".join(result.stdout.splitlines()[-30:])
         logger.error(
