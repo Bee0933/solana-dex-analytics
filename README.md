@@ -188,24 +188,6 @@ Read only, public Grafana snapshots (no login needed):
 - **[DEX Market Share](https://bestnyah7.grafana.net/dashboard/snapshot/nLQXskb0lPicNSrz89M7rYNW9VrD5Clj)**
 - **[Pipeline Status](https://bestnyah7.grafana.net/dashboard/snapshot/fknev0mXS7HkTIljptUKdvmGULGG86Ni)**
 
-> Create each in Grafana with **Share → Snapshot → Publish to snapshots.raintank.io** (or your Grafana Cloud snapshot URL), then paste the link above.
-
-### One time Grafana setup
-
-```bash
-# Create a key for the read only BigQuery reader SA (Terraform created the SA)
-gcloud iam service-accounts keys create credentials-grafana.json \
-  --iam-account "grafana-bigquery-reader@<PROJECT_ID>.iam.gserviceaccount.com"
-```
-
-In Grafana, go to **Connections → Add data source → Google BigQuery**:
-- **Authentication:** Service Account, then paste `credentials-grafana.json`
-- **Default project:** your project ID
-- **Processing location:** `europe-west3` (required, queries fail without it)
-
-### Import the dashboards
-
-Go to **Dashboards → New → Import** and upload the JSON:
 
 | File | Board | Shows |
 |---|---|---|
